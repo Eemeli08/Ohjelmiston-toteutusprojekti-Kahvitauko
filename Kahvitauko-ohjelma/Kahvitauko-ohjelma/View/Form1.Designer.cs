@@ -81,9 +81,9 @@
             Tuuli.AutoSize = true;
             Tuuli.Location = new Point(371, 89);
             Tuuli.Name = "Tuuli";
-            Tuuli.Size = new Size(59, 25);
+            Tuuli.Size = new Size(49, 25);
             Tuuli.TabIndex = 4;
-            Tuuli.Text = "label4";
+            Tuuli.Text = "Tuuli";
             // 
             // button1
             // 
