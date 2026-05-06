@@ -21,15 +21,6 @@ namespace Kahvitauko_ohjelma
         {
             // Molemmat palvelimet ylös porttiin 5000
             _ = new Controller.ProgServices().StartServers();
-            string connectionString = "Server=10.90.84.118\\SQLEXPRESS;Database=testi;User Id=teammate;Password=SomePassword123;TrustServerCertificate=True;";
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("SELECT Name FROM testaus WHERE Id = 1", conn);
-                string result = cmd.ExecuteScalar().ToString();
-                label4.Text = result;
-            }
         }
 
 
