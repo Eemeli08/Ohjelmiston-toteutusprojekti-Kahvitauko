@@ -75,6 +75,14 @@ name
 max power
 
 ## Each appliance has a usage profile
+----------------------------------
+id
+dateFrom
+dateTo
+timeFrom
+timeTo
+power
+
 
 ## Aurinkopaneeli
 
@@ -83,10 +91,4 @@ Kysy googlelta: "miten lasken aurinkopaneelin maksimitehon asennuskulmien ja kel
  
 
 Selitys on aika matemaattinen.... Voit aluksi käyttää paneelin maksimitehoa tai esim 50% maksimitehosta. Hae tietoa paneeleista "aurinkovoimala omakotitaloon" -haulla.
-----------------------------------
-id
-dateFrom
-dateTo
-timeFrom
-timeTo
-power
+
