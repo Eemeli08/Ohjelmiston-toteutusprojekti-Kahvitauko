@@ -24,7 +24,7 @@ namespace Kahvitauko_ohjelma
             // Molemmat palvelimet ylös porttiin 5000
             _ = new Controller.ProgServices().StartServers();
 
-            // Use a single, corrected connection string (no spaces in keyword names)
+            // Yhdistetään SQL Serveriin ja haetaan dataa Residency-taulusta (väliaikainen koodi, testaan vain yhteyttä)
             string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Sähkötiedot;Integrated Security=True;Pooling=False;Encrypt=True;TrustServerCertificate=True";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -91,6 +91,7 @@ namespace Kahvitauko_ohjelma
 
         private void reset_Click(object sender, EventArgs e)
         {
+            // Resetataan kaikki labelit oletusteksteihin
             label1.Text = "Aika";
             label2.Text = "Lämpö";
             label3.Text = "Aurinko";
