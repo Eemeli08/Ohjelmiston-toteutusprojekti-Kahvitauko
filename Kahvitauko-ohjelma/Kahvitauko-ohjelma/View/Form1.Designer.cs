@@ -35,6 +35,7 @@
             Tuuli = new Label();
             button1 = new Button();
             dateTimePicker1 = new DateTimePicker();
+            label4 = new Label();
             SuspendLayout();
             // 
             // btnOpenTime
@@ -102,11 +103,21 @@
             dateTimePicker1.Size = new Size(300, 31);
             dateTimePicker1.TabIndex = 6;
             // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(611, 311);
+            label4.Name = "label4";
+            label4.Size = new Size(59, 25);
+            label4.TabIndex = 7;
+            label4.Text = "label4";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label4);
             Controls.Add(dateTimePicker1);
             Controls.Add(button1);
             Controls.Add(Tuuli);
@@ -130,5 +141,6 @@
         private Label Tuuli;
         private Button button1;
         private DateTimePicker dateTimePicker1;
+        private Label label4;
     }
 }
