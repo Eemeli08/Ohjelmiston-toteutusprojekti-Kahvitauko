@@ -75,6 +75,14 @@ name
 max power
 
 ## Each appliance has a usage profile
+
+## Aurinkopaneeli
+
+Kysy googlelta: "miten lasken aurinkopaneelin maksimitehon asennuskulmien ja kellonajan mukaan tietyllä paikkakunnalla"
+
+ 
+
+Selitys on aika matemaattinen.... Voit aluksi käyttää paneelin maksimitehoa tai esim 50% maksimitehosta. Hae tietoa paneeleista "aurinkovoimala omakotitaloon" -haulla.
 ----------------------------------
 id
 dateFrom
