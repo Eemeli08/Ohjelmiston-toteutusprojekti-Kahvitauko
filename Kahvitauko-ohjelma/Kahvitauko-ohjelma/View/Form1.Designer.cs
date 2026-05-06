@@ -36,6 +36,7 @@
             button1 = new Button();
             dateTimePicker1 = new DateTimePicker();
             label4 = new Label();
+            reset = new Button();
             SuspendLayout();
             // 
             // btnOpenTime
@@ -106,17 +107,28 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(611, 311);
+            label4.Location = new Point(416, 206);
             label4.Name = "label4";
             label4.Size = new Size(59, 25);
             label4.TabIndex = 7;
             label4.Text = "label4";
+            // 
+            // reset
+            // 
+            reset.Location = new Point(106, 236);
+            reset.Name = "reset";
+            reset.Size = new Size(112, 34);
+            reset.TabIndex = 8;
+            reset.Text = "reset";
+            reset.UseVisualStyleBackColor = true;
+            reset.Click += reset_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(reset);
             Controls.Add(label4);
             Controls.Add(dateTimePicker1);
             Controls.Add(button1);
@@ -142,5 +154,6 @@
         private Button button1;
         private DateTimePicker dateTimePicker1;
         private Label label4;
+        private Button reset;
     }
 }

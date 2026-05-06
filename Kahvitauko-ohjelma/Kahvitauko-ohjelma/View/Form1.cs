@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -6,7 +7,8 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
+using static System.Net.WebRequestMethods;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Kahvitauko_ohjelma
 {
@@ -21,6 +23,26 @@ namespace Kahvitauko_ohjelma
         {
             // Molemmat palvelimet ylös porttiin 5000
             _ = new Controller.ProgServices().StartServers();
+
+            // Use a single, corrected connection string (no spaces in keyword names)
+            string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Sähkötiedot;Integrated Security=True;Pooling=False;Encrypt=True;TrustServerCertificate=True";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string query = "SELECT * FROM Residency";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    object result = cmd.ExecuteScalar();
+
+                    if (result != null)
+                    {
+                        label4.Text = result.ToString();
+                    }
+                }
+            }
         }
 
 
@@ -56,6 +78,7 @@ namespace Kahvitauko_ohjelma
             }
         }
 
+        // Tyhjät tapahtumankäsittelijät, jotka voidaan poistaa tai käyttää myöhemmin
         private void label1_Click(object sender, EventArgs e)
         {
 
@@ -66,6 +89,13 @@ namespace Kahvitauko_ohjelma
 
         }
 
-        
+        private void reset_Click(object sender, EventArgs e)
+        {
+            label1.Text = "Aika";
+            label2.Text = "Lämpö";
+            label3.Text = "Aurinko";
+            Tuuli.Text = "Tuuli";
+            label4.Text = "pitäs olla database tulostettuna";
+        }
     }
 }
