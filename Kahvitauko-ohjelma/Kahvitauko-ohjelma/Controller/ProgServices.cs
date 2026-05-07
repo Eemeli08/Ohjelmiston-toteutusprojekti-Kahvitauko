@@ -97,6 +97,7 @@ namespace Kahvitauko_ohjelma.Controller
 
         public async Task<WeatherResponse> GetWeatherAsync(DateTime date)
         {
+            // Avoimen meteon API vaatii päivämäärän muodossa YYYY-MM-DD, joten muotoillaan se ennen pyyntöä
             try
             {
                 string formattedDate = date.ToString("yyyy-MM-dd");
