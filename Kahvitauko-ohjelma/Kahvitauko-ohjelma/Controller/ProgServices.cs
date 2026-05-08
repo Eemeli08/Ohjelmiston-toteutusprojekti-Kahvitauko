@@ -17,6 +17,10 @@ namespace Kahvitauko_ohjelma.Controller
             listener.Prefixes.Add("http://localhost:5000/time/");
             //Sää(Ilman auringon valoa)
             listener.Prefixes.Add("http://localhost:5000/weather/");
+            // Sähkön hinta (nyt)
+            listener.Prefixes.Add("http://localhost:5000/price/now");
+            // Sähkön hinta (päivä)
+            listener.Prefixes.Add("http://localhost:5000/price/date");
 
             try { listener.Start(); }
             catch (Exception ex) { MessageBox.Show("Server Error: " + ex.Message); return; }
@@ -80,9 +84,105 @@ namespace Kahvitauko_ohjelma.Controller
                         }
                     }
 
+                    else if (path == "/price/now")
+                    {
+                        try
+                        {
+                            using (HttpClient client = new HttpClient())
+                            {
+                                client.DefaultRequestHeaders.Add("7837ee6a3f2d4392b4ed95c8608c7a13", "YOUR_API_KEY_HERE");
+
+                                string apiUrl = "https://api.fingrid.fi/v1/variable/124/events/json";
+                                string apiResponse = await client.GetStringAsync(apiUrl);
+
+                                using var doc = JsonDocument.Parse(apiResponse);
+                                var latest = doc.RootElement.EnumerateArray().Last();
+
+                                double priceMWh = latest.GetProperty("value").GetDouble();
+                                double priceCents = priceMWh / 10.0;
+
+                                var result = new
+                                {
+                                    PriceNow = priceCents,
+                                    Unit = "snt/kWh",
+                                    Time = latest.GetProperty("start_time").GetString()
+                                };
+
+                                jsonResponse = JsonSerializer.Serialize(result);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            jsonResponse = JsonSerializer.Serialize(new { Error = ex.Message });
+                        }
+                    }
+
+                    else if (path == "/price/date")
+                    {
+                        string reqDateStr = context.Request.QueryString["date"];
+
+                        if (string.IsNullOrEmpty(reqDateStr))
+                        {
+                            jsonResponse = JsonSerializer.Serialize(new { Error = "Missing date parameter." });
+                        }
+                        else
+                        {
+                            try
+                            {
+                                DateTime reqDate = DateTime.Parse(reqDateStr);
+                                string start = reqDate.ToString("yyyy-MM-ddT00:00:00Z");
+                                string end = reqDate.ToString("yyyy-MM-ddT23:59:59Z");
+
+                                using (HttpClient client = new HttpClient())
+                                {
+                                    client.DefaultRequestHeaders.Add("x-api-key", "YOUR_API_KEY_HERE");
+
+                                    string apiUrl =
+                                                                                $"https://api.fingrid.fi/v1/variable/124/events/json?start_time={start}&end_time={end}";
+
+                                    string apiResponse = await client.GetStringAsync(apiUrl);
+
+                                    using var doc = JsonDocument.Parse(apiResponse);
+                                    var prices = doc.RootElement.EnumerateArray().ToList();
+
+                                    if (prices.Count == 0)
+                                    {
+                                        jsonResponse = JsonSerializer.Serialize(new { Error = "No price data for this date." });
+                                    }
+                                    else
+                                    {
+                                        var hourlyPrices = new List<double>();
+
+                                        foreach (var p in prices)
+                                        {
+                                            double priceMWh = p.GetProperty("value").GetDouble();
+                                            double priceCents = priceMWh / 10.0;
+                                            hourlyPrices.Add(priceCents);
+                                        }
+
+                                        var result = new
+                                        {
+                                            Date = reqDateStr,
+                                            HourlyPrices = hourlyPrices,
+                                            Unit = "snt/kWh"
+                                        };
+
+                                        jsonResponse = JsonSerializer.Serialize(result);
+
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                jsonResponse = JsonSerializer.Serialize(new { Error = ex.Message });
+                            }
+                        }
+                    }
 
 
-                    byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
+
+
+                        byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
                     response.ContentType = "application/json";
                     response.ContentLength64 = buffer.Length;
                     await response.OutputStream.WriteAsync(buffer, 0, buffer.Length);
