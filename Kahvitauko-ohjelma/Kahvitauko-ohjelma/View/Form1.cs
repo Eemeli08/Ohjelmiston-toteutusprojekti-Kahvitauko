@@ -76,7 +76,45 @@ namespace Kahvitauko_ohjelma
             label2.Text = "Lämpö";
             label3.Text = "Aurinko";
             Tuuli.Text = "Tuuli";
-            label4.Text = "pitäs olla database tulostettuna";
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void richTextBox1_Load(object sender, EventArgs e)
+        {
+            string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Sähkötiedot;Integrated Security=True;Pooling=False;Encrypt=True;Trust Server Certificate=False";
+            string query = "SELECT * FROM Laite";
+
+            StringBuilder sb = new StringBuilder();
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                sb.Append(reader.GetValue(i).ToString() + "\t");
+                            }
+
+                            sb.AppendLine();
+                        }
+
+                    }
+                }
+                richTextBox1.Text = sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
         }
     }
 }
