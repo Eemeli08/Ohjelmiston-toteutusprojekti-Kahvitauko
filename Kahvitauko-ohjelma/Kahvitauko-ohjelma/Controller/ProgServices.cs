@@ -18,9 +18,9 @@ namespace Kahvitauko_ohjelma.Controller
             //Sää(Ilman auringon valoa)
             listener.Prefixes.Add("http://localhost:5000/weather/");
             // Sähkön hinta (nyt)
-            listener.Prefixes.Add("http://localhost:5000/price/now");
+            listener.Prefixes.Add("http://localhost:5000/price/now/");
             // Sähkön hinta (päivä)
-            listener.Prefixes.Add("http://localhost:5000/price/date");
+            listener.Prefixes.Add("http://localhost:5000/price/date/");
 
             try { listener.Start(); }
             catch (Exception ex) { MessageBox.Show("Server Error: " + ex.Message); return; }
@@ -90,8 +90,7 @@ namespace Kahvitauko_ohjelma.Controller
                         {
                             using (HttpClient client = new HttpClient())
                             {
-                                client.DefaultRequestHeaders.Add("7837ee6a3f2d4392b4ed95c8608c7a13", "YOUR_API_KEY_HERE");
-
+                                client.DefaultRequestHeaders.Add("x-api-key", "7837ee6a3f2d4392b4ed95c8608c7a13");
                                 string apiUrl = "https://api.fingrid.fi/v1/variable/124/events/json";
                                 string apiResponse = await client.GetStringAsync(apiUrl);
 
@@ -135,10 +134,10 @@ namespace Kahvitauko_ohjelma.Controller
 
                                 using (HttpClient client = new HttpClient())
                                 {
-                                    client.DefaultRequestHeaders.Add("x-api-key", "YOUR_API_KEY_HERE");
+                                    client.DefaultRequestHeaders.Add("x-api-key", "7837ee6a3f2d4392b4ed95c8608c7a13");
 
                                     string apiUrl =
-                                                                                $"https://api.fingrid.fi/v1/variable/124/events/json?start_time={start}&end_time={end}";
+                                         $"https://api.fingrid.fi/v1/variable/124/events/json?start_time={start}&end_time={end}";
 
                                     string apiResponse = await client.GetStringAsync(apiUrl);
 
