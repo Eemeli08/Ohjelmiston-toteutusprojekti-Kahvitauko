@@ -38,14 +38,16 @@ namespace Kahvitauko_ohjelma
             dateTimePicker1 = new DateTimePicker();
             reset = new Button();
             richTextBox1 = new RichTextBox();
+            Hintabtn = new Button();
+            Hintalbl = new Label();
             SuspendLayout();
             // 
             // btnOpenTime
             // 
-            btnOpenTime.Location = new Point(10, 10);
-            btnOpenTime.Margin = new Padding(2, 2, 2, 2);
+            btnOpenTime.Location = new Point(12, 12);
+            btnOpenTime.Margin = new Padding(2);
             btnOpenTime.Name = "btnOpenTime";
-            btnOpenTime.Size = new Size(90, 27);
+            btnOpenTime.Size = new Size(112, 34);
             btnOpenTime.TabIndex = 0;
             btnOpenTime.Text = "Aika";
             btnOpenTime.UseVisualStyleBackColor = true;
@@ -54,10 +56,10 @@ namespace Kahvitauko_ohjelma
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(104, 14);
+            label1.Location = new Point(130, 18);
             label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new Size(38, 20);
+            label1.Size = new Size(46, 25);
             label1.TabIndex = 1;
             label1.Text = "Aika";
             label1.Click += label1_Click;
@@ -65,10 +67,10 @@ namespace Kahvitauko_ohjelma
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(10, 71);
+            label2.Location = new Point(12, 89);
             label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
-            label2.Size = new Size(55, 20);
+            label2.Size = new Size(67, 25);
             label2.TabIndex = 2;
             label2.Text = "Lämpö";
             label2.Click += label2_Click;
@@ -76,29 +78,29 @@ namespace Kahvitauko_ohjelma
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(152, 71);
+            label3.Location = new Point(190, 89);
             label3.Margin = new Padding(2, 0, 2, 0);
             label3.Name = "label3";
-            label3.Size = new Size(60, 20);
+            label3.Size = new Size(74, 25);
             label3.TabIndex = 3;
             label3.Text = "Aurinko";
             // 
             // Tuuli
             // 
             Tuuli.AutoSize = true;
-            Tuuli.Location = new Point(297, 71);
+            Tuuli.Location = new Point(371, 89);
             Tuuli.Margin = new Padding(2, 0, 2, 0);
             Tuuli.Name = "Tuuli";
-            Tuuli.Size = new Size(41, 20);
+            Tuuli.Size = new Size(49, 25);
             Tuuli.TabIndex = 4;
             Tuuli.Text = "Tuuli";
             // 
             // button1
             // 
-            button1.Location = new Point(10, 42);
-            button1.Margin = new Padding(2, 2, 2, 2);
+            button1.Location = new Point(12, 52);
+            button1.Margin = new Padding(2);
             button1.Name = "button1";
-            button1.Size = new Size(90, 27);
+            button1.Size = new Size(112, 34);
             button1.TabIndex = 5;
             button1.Text = "Sää";
             button1.UseVisualStyleBackColor = true;
@@ -106,19 +108,19 @@ namespace Kahvitauko_ohjelma
             // 
             // dateTimePicker1
             // 
-            dateTimePicker1.Location = new Point(104, 44);
-            dateTimePicker1.Margin = new Padding(2, 2, 2, 2);
+            dateTimePicker1.Location = new Point(130, 55);
+            dateTimePicker1.Margin = new Padding(2);
             dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(241, 27);
+            dateTimePicker1.Size = new Size(300, 31);
             dateTimePicker1.TabIndex = 6;
             dateTimePicker1.ValueChanged += dateTimePicker1_ValueChanged;
             // 
             // reset
             // 
-            reset.Location = new Point(10, 323);
-            reset.Margin = new Padding(2, 2, 2, 2);
+            reset.Location = new Point(12, 404);
+            reset.Margin = new Padding(2);
             reset.Name = "reset";
-            reset.Size = new Size(90, 27);
+            reset.Size = new Size(112, 34);
             reset.TabIndex = 8;
             reset.Text = "reset";
             reset.UseVisualStyleBackColor = true;
@@ -126,20 +128,41 @@ namespace Kahvitauko_ohjelma
             // 
             // richTextBox1
             // 
-            richTextBox1.Location = new Point(104, 94);
-            richTextBox1.Margin = new Padding(2, 2, 2, 2);
+            richTextBox1.Location = new Point(130, 118);
+            richTextBox1.Margin = new Padding(2);
             richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(527, 258);
+            richTextBox1.Size = new Size(658, 322);
             richTextBox1.TabIndex = 10;
             richTextBox1.Text = "";
             richTextBox1.Click += richTextBox1_Load;
             richTextBox1.TextChanged += richTextBox1_TextChanged;
             // 
+            // Hintabtn
+            // 
+            Hintabtn.Location = new Point(455, 52);
+            Hintabtn.Name = "Hintabtn";
+            Hintabtn.Size = new Size(112, 34);
+            Hintabtn.TabIndex = 11;
+            Hintabtn.Text = "Hinta";
+            Hintabtn.UseVisualStyleBackColor = true;
+            Hintabtn.Click += btnTestPrice_Click;
+            // 
+            // Hintalbl
+            // 
+            Hintalbl.AutoSize = true;
+            Hintalbl.Location = new Point(165, 17);
+            Hintalbl.Name = "Hintalbl";
+            Hintalbl.Size = new Size(54, 25);
+            Hintalbl.TabIndex = 12;
+            Hintalbl.Text = "Hinta";
+            // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(640, 360);
+            ClientSize = new Size(800, 450);
+            Controls.Add(Hintalbl);
+            Controls.Add(Hintabtn);
             Controls.Add(richTextBox1);
             Controls.Add(reset);
             Controls.Add(dateTimePicker1);
@@ -149,7 +172,7 @@ namespace Kahvitauko_ohjelma
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(btnOpenTime);
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             Name = "Form1";
             Text = "Form1";
             Load += Form1_Load;
@@ -168,5 +191,7 @@ namespace Kahvitauko_ohjelma
         private DateTimePicker dateTimePicker1;
         private Button reset;
         private RichTextBox richTextBox1;
+        private Button Hintabtn;
+        private Label Hintalbl;
     }
 }

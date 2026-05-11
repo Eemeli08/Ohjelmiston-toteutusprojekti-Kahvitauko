@@ -126,5 +126,20 @@ namespace Kahvitauko_ohjelma
         {
 
         }
+        private async void btnTestPrice_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    string json = await client.GetStringAsync("http://localhost:5000/price/now/");
+                    Hintalbl.Text = json; // shows raw response first
+                }
+            }
+            catch (Exception ex)
+            {
+                Hintalbl.Text = "Error: " + ex.Message;
+            }
+        }
     }
 }
