@@ -1,4 +1,17 @@
-﻿CREATE TABLE [dbo].[Laite] (
+﻿-- Drop tables in reverse dependency order
+DROP TABLE IF EXISTS [dbo].[Residency_Laite];
+DROP TABLE IF EXISTS [dbo].[Laitekaytto];
+DROP TABLE IF EXISTS [dbo].[Residency];
+DROP TABLE IF EXISTS [dbo].[Ihminen];
+DROP TABLE IF EXISTS [dbo].[ElectricityContract];
+DROP TABLE IF EXISTS [dbo].[Car];
+DROP TABLE IF EXISTS [dbo].[Lisäsähkö];
+DROP TABLE IF EXISTS [dbo].[Heat];
+DROP TABLE IF EXISTS [dbo].[Laite];
+DROP TABLE IF EXISTS [dbo].[Sähkö_Data];
+
+-- Recreate all tables
+CREATE TABLE [dbo].[Laite] (
     [Id]       INT            NOT NULL IDENTITY(1,1),
     [Nimi]     NVARCHAR(255)  NOT NULL,
     [Max_teho] INT            NOT NULL,
@@ -72,4 +85,11 @@ CREATE TABLE [dbo].[Residency_Laite] (
     CONSTRAINT [PK_Residency_Laite]          PRIMARY KEY CLUSTERED ([ResidencyId], [LaiteId]),
     CONSTRAINT [FK_ResidencyLaite_Residency] FOREIGN KEY ([ResidencyId]) REFERENCES [dbo].[Residency]([Id]),
     CONSTRAINT [FK_ResidencyLaite_Laite]     FOREIGN KEY ([LaiteId])     REFERENCES [dbo].[Laite]([Id])
+);
+
+CREATE TABLE [dbo].[Sähkö_Data] (
+    [Id]         INT             NOT NULL IDENTITY(1,1),
+    [Päivä_Aika] DATETIME        NOT NULL,
+    [Hinta_kwh]  DECIMAL(10, 4)  NOT NULL,
+    CONSTRAINT [PK_Sähkö_Data] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
