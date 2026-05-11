@@ -1,5 +1,5 @@
 using System;
-using Microsoft.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -7,13 +7,16 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Data.SqlClient;
 using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace Kahvitauko_ohjelma
 {
     public partial class Form1 : Form
     {
+        //    Controller.ProgServices services = new Controller.ProgServices();  luo palvelimen olion, joka sisältää kaikki endpointit.
         public Form1()
         {
             InitializeComponent();
@@ -21,8 +24,9 @@ namespace Kahvitauko_ohjelma
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            // Molemmat palvelimet ylös porttiin 5000
-            _ = new Controller.ProgServices().StartServers();
+            //services.StartServers();-->  käynnistää palvelimen, kun Form1‑ikkuna avautuu.
+            //Näiden avulla ohjelma avaa portin 5001 ja alkaa vastata selaimen pyyntöihin(Time, Weather, Price).
+             _ = new Controller.ProgServices().StartServers();
         }
 
 
@@ -116,6 +120,11 @@ namespace Kahvitauko_ohjelma
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
