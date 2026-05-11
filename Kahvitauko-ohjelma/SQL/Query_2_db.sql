@@ -1,25 +1,42 @@
+﻿-- Drop tables in reverse dependency order
+DROP TABLE IF EXISTS [dbo].[Residency_Laite];
+DROP TABLE IF EXISTS [dbo].[Laitekaytto];
+DROP TABLE IF EXISTS [dbo].[Residency];
+DROP TABLE IF EXISTS [dbo].[Ihminen];
+DROP TABLE IF EXISTS [dbo].[ElectricityContract];
+DROP TABLE IF EXISTS [dbo].[Car];
+DROP TABLE IF EXISTS [dbo].[Lisäsähkö];
+DROP TABLE IF EXISTS [dbo].[Heat];
+DROP TABLE IF EXISTS [dbo].[Laite];
+DROP TABLE IF EXISTS [dbo].[Sähkö_Data];
+
+-- Recreate all tables
 CREATE TABLE [dbo].[Laite] (
     [Id]       INT            NOT NULL IDENTITY(1,1),
     [Nimi]     NVARCHAR(255)  NOT NULL,
     [Max_teho] INT            NOT NULL,
     CONSTRAINT [PK_Laite] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
 CREATE TABLE [dbo].[Heat] (
     [Id]     INT           NOT NULL IDENTITY(1,1),
     [Tyyppi] NVARCHAR(50)  NOT NULL,
     CONSTRAINT [PK_Heat] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
 CREATE TABLE [dbo].[Lisäsähkö] (
-    [Id]          INT           NOT NULL IDENTITY(1,1),
-    [Tyyppi]      NVARCHAR(50)  NOT NULL,
-    [Tehokkuus]   FLOAT         NOT NULL,
+    [Id]        INT           NOT NULL IDENTITY(1,1),
+    [Tyyppi]    NVARCHAR(50)  NOT NULL,
+    [Tehokkuus] FLOAT         NOT NULL,
     CONSTRAINT [PK_Lisäsähkö] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
 CREATE TABLE [dbo].[Car] (
     [Id]             INT            NOT NULL IDENTITY(1,1),
     [GoForwardStuff] NVARCHAR(100)  NULL,
     CONSTRAINT [PK_Car] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
 CREATE TABLE [dbo].[ElectricityContract] (
     [Id]           INT            NOT NULL IDENTITY(1,1),
     [Nimi]         NVARCHAR(100)  NOT NULL,
@@ -27,12 +44,14 @@ CREATE TABLE [dbo].[ElectricityContract] (
     [Siirto_hinta] FLOAT          NOT NULL,
     CONSTRAINT [PK_ElectricityContract] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
 CREATE TABLE [dbo].[Ihminen] (
     [Id]     INT            NOT NULL IDENTITY(1,1),
     [Talous] NVARCHAR(100)  NULL,
     [Kaytto] FLOAT          NULL,
     CONSTRAINT [PK_Ihminen] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
 CREATE TABLE [dbo].[Residency] (
     [Id]             INT            NOT NULL IDENTITY(1,1),
     [Osoite]         NVARCHAR(255)  NOT NULL,
@@ -41,13 +60,14 @@ CREATE TABLE [dbo].[Residency] (
     [Car]            INT            NULL,
     [Residency_guy]  INT            NULL,
     [Sahkosopimus]   INT            NULL,
-    CONSTRAINT [PK_Residency] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [PK_Residency]                     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Residency_Heat]                FOREIGN KEY ([Heating_method]) REFERENCES [dbo].[Heat]([Id]),
     CONSTRAINT [FK_Residency_Lisäsähkö]           FOREIGN KEY ([Lisasahko])      REFERENCES [dbo].[Lisäsähkö]([Id]),
     CONSTRAINT [FK_Residency_Car]                 FOREIGN KEY ([Car])            REFERENCES [dbo].[Car]([Id]),
     CONSTRAINT [FK_Residency_Ihminen]             FOREIGN KEY ([Residency_guy])  REFERENCES [dbo].[Ihminen]([Id]),
     CONSTRAINT [FK_Residency_ElectricityContract] FOREIGN KEY ([Sahkosopimus])   REFERENCES [dbo].[ElectricityContract]([Id])
 );
+
 CREATE TABLE [dbo].[Laitekaytto] (
     [LaiteId]  INT    NOT NULL,
     [DateFrom] DATE   NOT NULL,
@@ -55,13 +75,21 @@ CREATE TABLE [dbo].[Laitekaytto] (
     [TimeFrom] TIME   NOT NULL,
     [TimeTo]   TIME   NULL,
     [Power]    FLOAT  NOT NULL,
-    CONSTRAINT [PK_Laitekaytto] PRIMARY KEY CLUSTERED ([LaiteId], [DateFrom], [TimeFrom]),
+    CONSTRAINT [PK_Laitekaytto]       PRIMARY KEY CLUSTERED ([LaiteId], [DateFrom], [TimeFrom]),
     CONSTRAINT [FK_Laitekaytto_Laite] FOREIGN KEY ([LaiteId]) REFERENCES [dbo].[Laite]([Id])
 );
+
 CREATE TABLE [dbo].[Residency_Laite] (
     [ResidencyId] INT NOT NULL,
     [LaiteId]     INT NOT NULL,
     CONSTRAINT [PK_Residency_Laite]          PRIMARY KEY CLUSTERED ([ResidencyId], [LaiteId]),
     CONSTRAINT [FK_ResidencyLaite_Residency] FOREIGN KEY ([ResidencyId]) REFERENCES [dbo].[Residency]([Id]),
     CONSTRAINT [FK_ResidencyLaite_Laite]     FOREIGN KEY ([LaiteId])     REFERENCES [dbo].[Laite]([Id])
+);
+
+CREATE TABLE [dbo].[Sähkö_Data] (
+    [Id]         INT             NOT NULL IDENTITY(1,1),
+    [Päivä_Aika] DATETIME        NOT NULL,
+    [Hinta_kwh]  DECIMAL(10, 4)  NOT NULL,
+    CONSTRAINT [PK_Sähkö_Data] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
