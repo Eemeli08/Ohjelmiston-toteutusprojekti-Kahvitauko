@@ -37,9 +37,9 @@ namespace Kahvitauko_ohjelma
             button1 = new Button();
             dateTimePicker1 = new DateTimePicker();
             reset = new Button();
-            richTextBox1 = new RichTextBox();
             Hintabtn = new Button();
             Hintalbl = new Label();
+            richTextBox1 = new RichTextBox();
             SuspendLayout();
             // 
             // btnOpenTime
@@ -117,7 +117,7 @@ namespace Kahvitauko_ohjelma
             // 
             // reset
             // 
-            reset.Location = new Point(12, 404);
+            reset.Location = new Point(11, 524);
             reset.Margin = new Padding(2);
             reset.Name = "reset";
             reset.Size = new Size(112, 34);
@@ -125,17 +125,6 @@ namespace Kahvitauko_ohjelma
             reset.Text = "reset";
             reset.UseVisualStyleBackColor = true;
             reset.Click += reset_Click;
-            // 
-            // richTextBox1
-            // 
-            richTextBox1.Location = new Point(130, 118);
-            richTextBox1.Margin = new Padding(2);
-            richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(658, 322);
-            richTextBox1.TabIndex = 10;
-            richTextBox1.Text = "";
-            richTextBox1.Click += richTextBox1_Load;
-            richTextBox1.TextChanged += richTextBox1_TextChanged;
             // 
             // Hintabtn
             // 
@@ -156,14 +145,23 @@ namespace Kahvitauko_ohjelma
             Hintalbl.TabIndex = 12;
             Hintalbl.Text = "Hinta";
             // 
+            // richTextBox1
+            // 
+            richTextBox1.Location = new Point(318, 133);
+            richTextBox1.Name = "richTextBox1";
+            richTextBox1.Size = new Size(693, 425);
+            richTextBox1.TabIndex = 13;
+            richTextBox1.Text = "";
+            richTextBox1.Click += richTextBox1_Load;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1023, 569);
+            Controls.Add(richTextBox1);
             Controls.Add(Hintalbl);
             Controls.Add(Hintabtn);
-            Controls.Add(richTextBox1);
             Controls.Add(reset);
             Controls.Add(dateTimePicker1);
             Controls.Add(button1);
@@ -190,8 +188,8 @@ namespace Kahvitauko_ohjelma
         private Button button1;
         private DateTimePicker dateTimePicker1;
         private Button reset;
-        private RichTextBox richTextBox1;
         private Button Hintabtn;
         private Label Hintalbl;
+        private RichTextBox richTextBox1;
     }
 }

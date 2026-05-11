@@ -91,7 +91,7 @@ namespace Kahvitauko_ohjelma.Controller
                             using (HttpClient client = new HttpClient())
                             {
                                 client.DefaultRequestHeaders.Add("x-api-key", "d748defac84d4c48880332961af279ab");
-                                string apiUrl = "https://data.fingrid.fi/api/datasets/124/data";
+                                string apiUrl = "https://data.fingrid.fi/api/datasets/106/data";
                                 string apiResponse = await client.GetStringAsync(apiUrl);
 
                                 using var doc = JsonDocument.Parse(apiResponse);
@@ -138,7 +138,7 @@ namespace Kahvitauko_ohjelma.Controller
                                     client.DefaultRequestHeaders.Add("x-api-key", "d748defac84d4c48880332961af279ab");
 
                                     string apiUrl =
-                                        $"https://data.fingrid.fi/api/datasets/124/data?startTime={start}&endTime={end}";
+                                        $"https://data.fingrid.fi/api/datasets/106/data?startTime={start}&endTime={end}";
 
                                     string apiResponse = await client.GetStringAsync(apiUrl);
 

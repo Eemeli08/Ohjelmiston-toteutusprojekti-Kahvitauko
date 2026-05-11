@@ -22,13 +22,35 @@ namespace Kahvitauko_ohjelma
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private async void Form1_Load(object sender, EventArgs e)
         {
             //services.StartServers();-->  käynnistää palvelimen, kun Form1‑ikkuna avautuu.
             //Näiden avulla ohjelma avaa portin 5001 ja alkaa vastata selaimen pyyntöihin(Time, Weather, Price).
-             _ = new Controller.ProgServices().StartServers();
-        }
+            _ = new Controller.ProgServices().StartServers();
 
+            // Fetch price immediately on load
+            await FetchAndDisplayPrice();
+        }
+        private async Task FetchAndDisplayPrice()
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    string json = await client.GetStringAsync("http://localhost:5000/price/now/");
+
+                    using var doc = JsonDocument.Parse(json);
+                    double price = doc.RootElement.GetProperty("PriceNow").GetDouble();
+                    string unit = doc.RootElement.GetProperty("Unit").GetString();
+
+                    Hintalbl.Text = $"Price: {price:F2} {unit}";
+                }
+            }
+            catch (Exception ex)
+            {
+                Hintalbl.Text = "Error: " + ex.Message;
+            }
+        }
 
 
         private async void FetchWeatherButton_Click(object sender, EventArgs e)
@@ -88,7 +110,7 @@ namespace Kahvitauko_ohjelma
         }
         private void richTextBox1_Load(object sender, EventArgs e)
         {
-            // Yhdistetään tietokantaan ja haetaan Laite-taulun data(väliaikaista koodia koska testailen)
+                        // Yhdistetään tietokantaan ja haetaan Laite-taulun data(väliaikaista koodia koska testailen)
             string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Sähkötiedot;Integrated Security=True;Pooling=False;Encrypt=True;Trust Server Certificate=False";
             string query = "SELECT * FROM Laite";
 
@@ -128,26 +150,12 @@ namespace Kahvitauko_ohjelma
         }
         private async void btnTestPrice_Click(object sender, EventArgs e)
         {
-            try
-            {
-                using (HttpClient client = new HttpClient())
-                {
-                    string json = await client.GetStringAsync("http://localhost:5000/price/now/");
+            await FetchAndDisplayPrice();
+        }
 
-                    // Debug: show raw response first
-                    Hintalbl.Text = json; // <-- add this temporarily
+        private void listBox1_Click(object sender, EventArgs e)
+        {
 
-                    using var doc = JsonDocument.Parse(json);
-                    double price = doc.RootElement.GetProperty("PriceNow").GetDouble();
-                    string unit = doc.RootElement.GetProperty("Unit").GetString();
-
-                    Hintalbl.Text = $"Price: {price:F2} {unit}";
-                }
-            }
-            catch (Exception ex)
-            {
-                Hintalbl.Text = "Error: " + ex.Message;
-            }
         }
     }
 }
