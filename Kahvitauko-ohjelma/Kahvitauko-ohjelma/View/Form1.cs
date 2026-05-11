@@ -1,4 +1,6 @@
+using Microsoft.Data.SqlClient;
 using System;
+using System.Collections;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -7,7 +9,6 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.Data.SqlClient;
 using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
@@ -112,7 +113,7 @@ namespace Kahvitauko_ohjelma
         {
                         // Yhdistetään tietokantaan ja haetaan Laite-taulun data(väliaikaista koodia koska testailen)
             string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Sähkötiedot;Integrated Security=True;Pooling=False;Encrypt=True;Trust Server Certificate=False";
-            string query = "SELECT * FROM Laite";
+            string query = "SELECT * FROM Sähkö_Data";
 
             StringBuilder sb = new StringBuilder();
 
@@ -157,5 +158,43 @@ namespace Kahvitauko_ohjelma
         {
 
         }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            // Replace this with your actual connection string from the Properties window
+            string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Sähkötiedot;Integrated Security=True";
+
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    string query = "INSERT INTO Sähkö_Data (Päivä_Aika, hinta_kwh) VALUES (@Päivä_Aika, @hinta_kwh)";
+                    SqlCommand cmd = new SqlCommand(query, conn);
+
+                    cmd.Parameters.AddWithValue("@Päivä_Aika", DateTime.Now);
+
+                    string cleanPrice = Hintalbl.Text
+                        .Replace("Price:", "")
+                        .Replace("snt/kWh", "")
+                        .Replace(".", ",")
+                        .Trim();
+
+                    cmd.Parameters.AddWithValue("@hinta_kwh", decimal.Parse(cleanPrice));
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+
+                    MessageBox.Show("Data saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                // This will show you exactly what went wrong if it fails again
+                MessageBox.Show("Error: " + ex.Message, "Save Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
     }
 }

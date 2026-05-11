@@ -40,6 +40,7 @@ namespace Kahvitauko_ohjelma
             Hintabtn = new Button();
             Hintalbl = new Label();
             richTextBox1 = new RichTextBox();
+            Tallennabtn = new Button();
             SuspendLayout();
             // 
             // btnOpenTime
@@ -154,11 +155,22 @@ namespace Kahvitauko_ohjelma
             richTextBox1.Text = "";
             richTextBox1.Click += richTextBox1_Load;
             // 
+            // Tallennabtn
+            // 
+            Tallennabtn.Location = new Point(93, 267);
+            Tallennabtn.Name = "Tallennabtn";
+            Tallennabtn.Size = new Size(112, 34);
+            Tallennabtn.TabIndex = 14;
+            Tallennabtn.Text = "Tallenna";
+            Tallennabtn.UseVisualStyleBackColor = true;
+            Tallennabtn.Click += btnSave_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1023, 569);
+            Controls.Add(Tallennabtn);
             Controls.Add(richTextBox1);
             Controls.Add(Hintalbl);
             Controls.Add(Hintabtn);
@@ -191,5 +203,6 @@ namespace Kahvitauko_ohjelma
         private Button Hintabtn;
         private Label Hintalbl;
         private RichTextBox richTextBox1;
+        private Button Tallennabtn;
     }
 }
