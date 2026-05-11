@@ -84,6 +84,7 @@ namespace Kahvitauko_ohjelma
         }
         private void richTextBox1_Load(object sender, EventArgs e)
         {
+            // Yhdistetään tietokantaan ja haetaan Laite-taulun data(väliaikaista koodia koska testailen)
             string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Sähkötiedot;Integrated Security=True;Pooling=False;Encrypt=True;Trust Server Certificate=False";
             string query = "SELECT * FROM Laite";
 
