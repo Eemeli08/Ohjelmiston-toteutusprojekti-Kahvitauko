@@ -139,7 +139,7 @@ namespace Kahvitauko_ohjelma
             // 
             // Hintabtn
             // 
-            Hintabtn.Location = new Point(455, 52);
+            Hintabtn.Location = new Point(435, 55);
             Hintabtn.Name = "Hintabtn";
             Hintabtn.Size = new Size(112, 34);
             Hintabtn.TabIndex = 11;
@@ -150,7 +150,7 @@ namespace Kahvitauko_ohjelma
             // Hintalbl
             // 
             Hintalbl.AutoSize = true;
-            Hintalbl.Location = new Point(165, 17);
+            Hintalbl.Location = new Point(565, 61);
             Hintalbl.Name = "Hintalbl";
             Hintalbl.Size = new Size(54, 25);
             Hintalbl.TabIndex = 12;

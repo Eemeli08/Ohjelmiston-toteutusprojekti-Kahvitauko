@@ -133,7 +133,15 @@ namespace Kahvitauko_ohjelma
                 using (HttpClient client = new HttpClient())
                 {
                     string json = await client.GetStringAsync("http://localhost:5000/price/now/");
-                    Hintalbl.Text = json; // shows raw response first
+
+                    // Debug: show raw response first
+                    Hintalbl.Text = json; // <-- add this temporarily
+
+                    using var doc = JsonDocument.Parse(json);
+                    double price = doc.RootElement.GetProperty("PriceNow").GetDouble();
+                    string unit = doc.RootElement.GetProperty("Unit").GetString();
+
+                    Hintalbl.Text = $"Price: {price:F2} {unit}";
                 }
             }
             catch (Exception ex)

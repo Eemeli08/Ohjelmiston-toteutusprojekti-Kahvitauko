@@ -84,18 +84,19 @@ namespace Kahvitauko_ohjelma.Controller
                         }
                     }
 
-                    else if (path == "/price/now")
+                    else if (path == "/price/now/")
                     {
                         try
                         {
                             using (HttpClient client = new HttpClient())
                             {
-                                client.DefaultRequestHeaders.Add("x-api-key", "7837ee6a3f2d4392b4ed95c8608c7a13");
-                                string apiUrl = "https://api.fingrid.fi/v1/variable/124/events/json";
+                                client.DefaultRequestHeaders.Add("x-api-key", "d748defac84d4c48880332961af279ab");
+                                string apiUrl = "https://data.fingrid.fi/api/datasets/124/data";
                                 string apiResponse = await client.GetStringAsync(apiUrl);
 
                                 using var doc = JsonDocument.Parse(apiResponse);
-                                var latest = doc.RootElement.EnumerateArray().Last();
+                                var dataArray = doc.RootElement.GetProperty("data");
+                                var latest = dataArray.EnumerateArray().Last();
 
                                 double priceMWh = latest.GetProperty("value").GetDouble();
                                 double priceCents = priceMWh / 10.0;
@@ -104,7 +105,7 @@ namespace Kahvitauko_ohjelma.Controller
                                 {
                                     PriceNow = priceCents,
                                     Unit = "snt/kWh",
-                                    Time = latest.GetProperty("start_time").GetString()
+                                    Time = latest.GetProperty("startTime").GetString()
                                 };
 
                                 jsonResponse = JsonSerializer.Serialize(result);
@@ -134,10 +135,10 @@ namespace Kahvitauko_ohjelma.Controller
 
                                 using (HttpClient client = new HttpClient())
                                 {
-                                    client.DefaultRequestHeaders.Add("x-api-key", "7837ee6a3f2d4392b4ed95c8608c7a13");
+                                    client.DefaultRequestHeaders.Add("x-api-key", "d748defac84d4c48880332961af279ab");
 
                                     string apiUrl =
-                                         $"https://api.fingrid.fi/v1/variable/124/events/json?start_time={start}&end_time={end}";
+                                        $"https://data.fingrid.fi/api/datasets/124/data?startTime={start}&endTime={end}";
 
                                     string apiResponse = await client.GetStringAsync(apiUrl);
 
