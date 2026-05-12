@@ -1,15 +1,32 @@
+<<<<<<< HEAD:Kahvitauko-ohjelma/Kahvitauko-ohjelma/View/Mainform.cs
+using Kahvitauko_ohjelma.View;
+using Microsoft.Data.SqlClient;
+using Microsoft.VisualBasic.Devices;
+using System;
+using System.Collections;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using static System.Net.WebRequestMethods;
+=======
 using Kahvitauko_ohjelma.Controller;
 using Microsoft.Data.SqlClient;
 using System.Text;
 using System.Text.Json;
 
+>>>>>>> 58c9e0e7feab2ff8702824ebf560d8ddef59d15c:Kahvitauko-ohjelma/Kahvitauko-ohjelma/View/Form1.cs
 
 namespace Kahvitauko_ohjelma
 {
-    public partial class Form1 : Form
+    public partial class Mainform : Form
     {
         //    Controller.ProgServices services = new Controller.ProgServices();  luo palvelimen olion, joka sisältää kaikki endpointit.
-        public Form1()
+        public Mainform()
         {
             InitializeComponent();
         }
@@ -20,8 +37,9 @@ namespace Kahvitauko_ohjelma
             //Näiden avulla ohjelma avaa portin 5001 ja alkaa vastata selaimen pyyntöihin(Time, Weather, Price).
             _ = new Controller.ProgServices().StartServers();
 
-            // Fetch price immediately on load
+            // Hakee hinnan heti kun ohjelma käynnistyy.
             await FetchAndDisplayPrice();
+            timer1.Start();
         }
         private async Task FetchAndDisplayPrice() // Hakee sähkön hinnan palvelimelta ja näyttää sen Hintalbl:ssä, tämä tapahtuu, kun ohjelma käynnistyy.
         {
@@ -101,6 +119,7 @@ namespace Kahvitauko_ohjelma
             label3.Text = "Aurinko";
             Tuuli.Text = "Tuuli";
             Hintalbl.Text = "Hinta";
+            Solarlabel.Text = "Aurinkopaneeli";
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
@@ -152,7 +171,7 @@ namespace Kahvitauko_ohjelma
 
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString)) 
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
                     using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -265,5 +284,65 @@ namespace Kahvitauko_ohjelma
                 MessageBox.Show("Error: " + ex.Message, "Save Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+<<<<<<< HEAD:Kahvitauko-ohjelma/Kahvitauko-ohjelma/View/Mainform.cs
+
+        private SolarPanel _solarPanel = new SolarPanel();
+        private double GetSolarElevation(DateTime time)
+        {
+            // Yksinkertainen malli auringon korkeudesta, joka perustuu päivämäärään ja kellonaikaan
+            double lat = 62.2; // Jyväskylä
+            double lon = 25.7;
+            int dayOfYear = time.DayOfYear;
+            double hour = time.Hour + time.Minute / 60.0;
+
+            double declination = 23.45 * Math.Sin(Math.PI / 180 * (360.0 / 365 * (dayOfYear - 81)));
+            double hourAngle = 15 * (hour - 12);
+
+            double elevation = Math.Asin(
+                Math.Sin(lat * Math.PI / 180) * Math.Sin(declination * Math.PI / 180) +
+                Math.Cos(lat * Math.PI / 180) * Math.Cos(declination * Math.PI / 180) *
+                Math.Cos(hourAngle * Math.PI / 180)
+            ) * 180 / Math.PI;
+
+            return Math.Max(0, elevation);
+        }
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            label1.Text = DateTime.Now.ToString("hh:mm:ss tt");
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            settingsform settingsForm = new settingsform();
+            settingsForm.ShowDialog();
+
+        }
     }
 }
+public class SolarPanel
+{
+    // Yksinkertainen malli aurinkopaneelin tehosta, joka perustuu auringon korkeuteen ja pilvisyyteen
+    public double MaxPowerKw { get; set; } = 5.0;  // kWp
+    public double TiltAngle { get; set; } = 35;    // kallistuskulma
+    public double AzimuthAngle { get; set; } = 180; // etelä
+
+    public double CalculatePower(double solarElevationDeg, double sunlightPercent) // solarElevationDeg: Auringon korkeusasteina, sunlightPercent: Pilvisyysprosentti
+    {
+        // Jos aurinko on horisontin alapuolella, teho on nolla
+        if (solarElevationDeg <= 0) return 0;
+
+        double elevationRad = solarElevationDeg * Math.PI / 180;
+        double tiltRad = TiltAngle * Math.PI / 180;
+
+        double angleFactor = Math.Max(0, Math.Min(1, Math.Sin(elevationRad + tiltRad)));
+        double cloudFactor = sunlightPercent / 100.0;
+
+        return MaxPowerKw * angleFactor * cloudFactor;
+    }
+
+
+}
+=======
+    }
+}
+>>>>>>> 58c9e0e7feab2ff8702824ebf560d8ddef59d15c:Kahvitauko-ohjelma/Kahvitauko-ohjelma/View/Form1.cs
