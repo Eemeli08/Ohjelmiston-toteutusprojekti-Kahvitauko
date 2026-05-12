@@ -150,6 +150,41 @@ namespace Kahvitauko_ohjelma
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
+        private void richTextBox2_Load(object sender, EventArgs e) // Hakee tiedot tietokannan taulusta ja näyttää ne richTextBox1:ssä, tämä tapahtuu, kun richTextBox1 ladataan, eli siis heti, kun ohjelma käynnistyy. (testausta vaan)
+        {
+            // Yhdistetään tietokantaan ja haetaan Laite-taulun data(väliaikaista koodia koska testailen)
+            string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Sähkötiedot;Integrated Security=True;Pooling=False;Encrypt=True;Trust Server Certificate=False";
+            string query = "SELECT * FROM Sähkö_Data";
+
+            StringBuilder sb = new StringBuilder();
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString)) 
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                sb.Append(reader.GetValue(i).ToString() + "\t");
+                            }
+
+                            sb.AppendLine();
+                        }
+
+                    }
+                }
+                richTextBox2.Text = sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
@@ -281,4 +316,5 @@ public class SolarPanel
 
         return MaxPowerKw * angleFactor * cloudFactor;
     }
+
 }
