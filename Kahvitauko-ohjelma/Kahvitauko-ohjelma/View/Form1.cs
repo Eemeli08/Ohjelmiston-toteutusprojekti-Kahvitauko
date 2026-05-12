@@ -111,9 +111,9 @@ namespace Kahvitauko_ohjelma
         }
         private void richTextBox1_Load(object sender, EventArgs e)
         {
-                        // Yhdistetään tietokantaan ja haetaan Laite-taulun data(väliaikaista koodia koska testailen)
+            // Yhdistetään tietokantaan ja haetaan Laite-taulun data(väliaikaista koodia koska testailen)
             string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Sähkötiedot;Integrated Security=True;Pooling=False;Encrypt=True;Trust Server Certificate=False";
-            string query = "SELECT * FROM Sähkö_Data";
+            string query = "SELECT * FROM Sää_Data";
 
             StringBuilder sb = new StringBuilder();
 
@@ -161,7 +161,6 @@ namespace Kahvitauko_ohjelma
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            // Replace this with your actual connection string from the Properties window
             string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Sähkötiedot;Integrated Security=True";
 
 
@@ -190,11 +189,44 @@ namespace Kahvitauko_ohjelma
             }
             catch (Exception ex)
             {
-                // This will show you exactly what went wrong if it fails again
                 MessageBox.Show("Error: " + ex.Message, "Save Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Sähkötiedot;Integrated Security=True";
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    string query = "INSERT INTO Sää_Data (Päivä_Aika, Lämpö, Aurinko, Tuuli) VALUES (@Päivä_Aika, @Lämpö, @Aurinko, @Tuuli)";
+                    SqlCommand cmd = new SqlCommand(query, conn);
+
+                    cmd.Parameters.AddWithValue("@Päivä_Aika", dateTimePicker1.Value);
+
+                    string cleanTemp = label2.Text.Replace("Temperature:", "").Replace("°C", "").Replace(".", ",").Trim();
+                    cmd.Parameters.AddWithValue("@Lämpö", decimal.Parse(cleanTemp));
+
+                    string cleanSun = label3.Text.Replace("Sunlight:", "").Replace("%", "").Replace(".", ",").Trim();
+                    cmd.Parameters.AddWithValue("@Aurinko", decimal.Parse(cleanSun));
+
+                    string cleanWind = Tuuli.Text.Replace("Wind:", "").Replace("m/s", "").Replace(".", ",").Trim();
+                    cmd.Parameters.AddWithValue("@Tuuli", decimal.Parse(cleanWind));
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+
+                    MessageBox.Show("Weather data saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Save Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
     }
+
 }
