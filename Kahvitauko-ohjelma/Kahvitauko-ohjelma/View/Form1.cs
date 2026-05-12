@@ -67,6 +67,11 @@ namespace Kahvitauko_ohjelma
             label2.Text = $"Temperature: {data.TempC} °C";
             label3.Text = $"Sunlight: {data.Sunlight} %";
             Tuuli.Text = $"Wind: {data.WindSpeed} m/s";
+
+            // Lasketaan aurinkopaneelin teho sään perusteella
+            double elevation = GetSolarElevation(dateTimePicker1.Value);
+            double power = _solarPanel.CalculatePower(elevation, data.Sunlight);
+            Solarlabel.Text = $"Aurinkopaneeli: {power:F2} kW";
         }
 
 
@@ -103,6 +108,7 @@ namespace Kahvitauko_ohjelma
             label2.Text = "Lämpö";
             label3.Text = "Aurinko";
             Tuuli.Text = "Tuuli";
+            Hintalbl.Text = "Hinta";
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
@@ -227,6 +233,43 @@ namespace Kahvitauko_ohjelma
             }
         }
 
-    }
+        private SolarPanel _solarPanel = new SolarPanel();
+        private double GetSolarElevation(DateTime time)
+        {
+            double lat = 62.2; // Jyväskylä
+            double lon = 25.7;
+            int dayOfYear = time.DayOfYear;
+            double hour = time.Hour + time.Minute / 60.0;
 
+            double declination = 23.45 * Math.Sin(Math.PI / 180 * (360.0 / 365 * (dayOfYear - 81)));
+            double hourAngle = 15 * (hour - 12);
+
+            double elevation = Math.Asin(
+                Math.Sin(lat * Math.PI / 180) * Math.Sin(declination * Math.PI / 180) +
+                Math.Cos(lat * Math.PI / 180) * Math.Cos(declination * Math.PI / 180) *
+                Math.Cos(hourAngle * Math.PI / 180)
+            ) * 180 / Math.PI;
+
+            return Math.Max(0, elevation);
+        }
+    }
+}
+public class SolarPanel
+{
+    public double MaxPowerKw { get; set; } = 5.0;  // kWp
+    public double TiltAngle { get; set; } = 35;    // kallistuskulma
+    public double AzimuthAngle { get; set; } = 180; // etelä
+
+    public double CalculatePower(double solarElevationDeg, double sunlightPercent)
+    {
+        if (solarElevationDeg <= 0) return 0;
+
+        double elevationRad = solarElevationDeg * Math.PI / 180;
+        double tiltRad = TiltAngle * Math.PI / 180;
+
+        double angleFactor = Math.Max(0, Math.Min(1, Math.Sin(elevationRad + tiltRad)));
+        double cloudFactor = sunlightPercent / 100.0;
+
+        return MaxPowerKw * angleFactor * cloudFactor;
+    }
 }

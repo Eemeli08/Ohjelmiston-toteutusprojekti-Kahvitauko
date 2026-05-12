@@ -42,6 +42,7 @@ namespace Kahvitauko_ohjelma
             richTextBox1 = new RichTextBox();
             Tallennabtn = new Button();
             button2 = new Button();
+            Solarlabel = new Label();
             SuspendLayout();
             // 
             // btnOpenTime
@@ -176,11 +177,22 @@ namespace Kahvitauko_ohjelma
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
+            // Solarlabel
+            // 
+            Solarlabel.AutoSize = true;
+            Solarlabel.Location = new Point(37, 435);
+            Solarlabel.Margin = new Padding(2, 0, 2, 0);
+            Solarlabel.Name = "Solarlabel";
+            Solarlabel.Size = new Size(130, 25);
+            Solarlabel.TabIndex = 16;
+            Solarlabel.Text = "Aurinkopaneeli";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1023, 569);
+            Controls.Add(Solarlabel);
             Controls.Add(button2);
             Controls.Add(Tallennabtn);
             Controls.Add(richTextBox1);
@@ -217,5 +229,6 @@ namespace Kahvitauko_ohjelma
         private RichTextBox richTextBox1;
         private Button Tallennabtn;
         private Button button2;
+        private Label Solarlabel;
     }
 }

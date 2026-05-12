@@ -9,9 +9,10 @@ namespace Kahvitauko_ohjelma.Model
         public class WeatherResponse
         {
             public double TempC { get; set; }
-            public int Sunlight { get; set; }
+            public double Sunlight { get; set; }
             public double WindSpeed { get; set; }
             public string ?Error { get; set; }
+
         }
 
     }
