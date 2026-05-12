@@ -32,7 +32,7 @@ namespace Kahvitauko_ohjelma
             // Fetch price immediately on load
             await FetchAndDisplayPrice();
         }
-        private async Task FetchAndDisplayPrice()
+        private async Task FetchAndDisplayPrice() // Hakee sähkön hinnan palvelimelta ja näyttää sen Hintalbl:ssä, tämä tapahtuu, kun ohjelma käynnistyy.
         {
             try
             {
@@ -54,7 +54,8 @@ namespace Kahvitauko_ohjelma
         }
 
 
-        private async void FetchWeatherButton_Click(object sender, EventArgs e)
+        private async void FetchWeatherButton_Click(object sender, EventArgs e) // Hakee sään tiedot palvelimelta ja näyttää ne label2:ssa, label3:ssa ja Tuuli:ssä,
+                                                                                // tämä tapahtuu, kun käyttäjä klikkaa "Sää" -nappia sen jälkeen kun on valinnut, miltä päivältä haluaa sään.
         {
             var data = await new Controller.ProgServices().GetWeatherAsync(dateTimePicker1.Value);
 
@@ -75,7 +76,7 @@ namespace Kahvitauko_ohjelma
         }
 
 
-        private async void btnOpenTime_Click(object sender, EventArgs e)
+        private async void btnOpenTime_Click(object sender, EventArgs e) // Hakee kellonajan palvelimelta ja näyttää sen label1:ssä, tämä tapahtuu, kun käyttäjä klikkaa "Aika" -nappia.
         {
             using (HttpClient client = new HttpClient())
             {
@@ -90,15 +91,14 @@ namespace Kahvitauko_ohjelma
             }
         }
 
-        // Tyhjät tapahtumankäsittelijät, jotka voidaan poistaa tai käyttää myöhemmin
         private void label1_Click(object sender, EventArgs e)
         {
-
+            // Tyhjä tapahtumankäsittelijä, joka voidaan poistaa tai käyttää myöhemmin
         }
 
         private void label2_Click(object sender, EventArgs e)
         {
-
+            // Tyhjä tapahtumankäsittelijä, joka voidaan poistaa tai käyttää myöhemmin
         }
 
         private void reset_Click(object sender, EventArgs e)
@@ -113,9 +113,9 @@ namespace Kahvitauko_ohjelma
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
-
+            // Tyhjä tapahtumankäsittelijä, joka voidaan poistaa tai käyttää myöhemmin
         }
-        private void richTextBox1_Load(object sender, EventArgs e)
+        private void richTextBox1_Load(object sender, EventArgs e) // Hakee tiedot tietokannan taulusta ja näyttää ne richTextBox1:ssä, tämä tapahtuu, kun richTextBox1 ladataan, eli siis heti, kun ohjelma käynnistyy. (testausta vaan)
         {
             // Yhdistetään tietokantaan ja haetaan Laite-taulun data(väliaikaista koodia koska testailen)
             string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Sähkötiedot;Integrated Security=True;Pooling=False;Encrypt=True;Trust Server Certificate=False";
@@ -153,22 +153,23 @@ namespace Kahvitauko_ohjelma
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
-
+            // Tyhjä tapahtumankäsittelijä, joka voidaan poistaa tai käyttää myöhemmin
         }
         private async void btnTestPrice_Click(object sender, EventArgs e)
         {
+            // Testataan FetchAndDisplayPrice-metodia, joka hakee sähkön hinnan ja päivittää Hintalbl:n tekstin,
+            // hinta päivittyy ja tulostuu labelille aina kun ohjelma käynnistyy, mutta tällä napilla voi hakea hinnan uudestaan halutessaan.
             await FetchAndDisplayPrice();
         }
 
         private void listBox1_Click(object sender, EventArgs e)
         {
-
+            // Tyhjä tapahtumankäsittelijä, joka voidaan poistaa tai käyttää myöhemmin
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e) // Tallennetaan säädata tietokantaan
         {
             string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Sähkötiedot;Integrated Security=True";
-
 
             try
             {
@@ -179,6 +180,7 @@ namespace Kahvitauko_ohjelma
 
                     cmd.Parameters.AddWithValue("@Päivä_Aika", DateTime.Now);
 
+                    // Puhdistetaan Hintalbl.Text:stä ylimääräiset merkit ja muutetaan desimaalierotin pilkuksi ennen tallennusta
                     string cleanPrice = Hintalbl.Text
                         .Replace("Price:", "")
                         .Replace("snt/kWh", "")
@@ -199,7 +201,7 @@ namespace Kahvitauko_ohjelma
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e) //Tallentaa sään tiedot tietokantaan, eli siis lämpötilan, auringonvalon ja tuulen nopeuden. Tämä tapahtuu, kun käyttäjä klikkaa "Tallenna sää" -nappia.
         {
             string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Sähkötiedot;Integrated Security=True";
 
@@ -207,7 +209,7 @@ namespace Kahvitauko_ohjelma
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    string query = "INSERT INTO Sää_Data (Päivä_Aika, Lämpö, Aurinko, Tuuli) VALUES (@Päivä_Aika, @Lämpö, @Aurinko, @Tuuli)";
+                    string query = "INSERT INTO Sää_Data (Päivä_Aika, Lämpö, Aurinko, Tuuli, Aurinkopaneeli) VALUES (@Päivä_Aika, @Lämpö, @Aurinko, @Tuuli, @Aurinkopaneeli)";
                     SqlCommand cmd = new SqlCommand(query, conn);
 
                     cmd.Parameters.AddWithValue("@Päivä_Aika", dateTimePicker1.Value);
@@ -221,12 +223,16 @@ namespace Kahvitauko_ohjelma
                     string cleanWind = Tuuli.Text.Replace("Wind:", "").Replace("m/s", "").Replace(".", ",").Trim();
                     cmd.Parameters.AddWithValue("@Tuuli", decimal.Parse(cleanWind));
 
+                    string cleanSolar = Solarlabel.Text.Replace("Aurinkopaneeli:", "").Replace("kW", "").Replace(".", ",").Trim();
+                    cmd.Parameters.AddWithValue("@Aurinkopaneeli", decimal.Parse(cleanSolar));
+
                     conn.Open();
                     cmd.ExecuteNonQuery();
 
                     MessageBox.Show("Weather data saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
+            // Tallennusvirheen käsittely
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message, "Save Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -236,6 +242,7 @@ namespace Kahvitauko_ohjelma
         private SolarPanel _solarPanel = new SolarPanel();
         private double GetSolarElevation(DateTime time)
         {
+            // Yksinkertainen malli auringon korkeudesta, joka perustuu päivämäärään ja kellonaikaan
             double lat = 62.2; // Jyväskylä
             double lon = 25.7;
             int dayOfYear = time.DayOfYear;
@@ -256,12 +263,14 @@ namespace Kahvitauko_ohjelma
 }
 public class SolarPanel
 {
+    // Yksinkertainen malli aurinkopaneelin tehosta, joka perustuu auringon korkeuteen ja pilvisyyteen
     public double MaxPowerKw { get; set; } = 5.0;  // kWp
     public double TiltAngle { get; set; } = 35;    // kallistuskulma
     public double AzimuthAngle { get; set; } = 180; // etelä
 
-    public double CalculatePower(double solarElevationDeg, double sunlightPercent)
+    public double CalculatePower(double solarElevationDeg, double sunlightPercent) // solarElevationDeg: Auringon korkeusasteina, sunlightPercent: Pilvisyysprosentti
     {
+        // Jos aurinko on horisontin alapuolella, teho on nolla
         if (solarElevationDeg <= 0) return 0;
 
         double elevationRad = solarElevationDeg * Math.PI / 180;

@@ -15,7 +15,7 @@ namespace Kahvitauko_ohjelma.Controller
             HttpListener listener = new HttpListener();
             //Aika
             listener.Prefixes.Add("http://localhost:5000/time/");
-            //Sää(Ilman auringon valoa)
+            //Sää
             listener.Prefixes.Add("http://localhost:5000/weather/");
             // Sähkön hinta (nyt)
             listener.Prefixes.Add("http://localhost:5000/price/now/");
@@ -34,12 +34,12 @@ namespace Kahvitauko_ohjelma.Controller
                     string jsonResponse = "";
                     string path = context.Request.Url.LocalPath;
 
-                    if (path == "/time/")
+                    if (path == "/time/") // Aika endpoint
                     {
                         var timeData = new { CurrentTime = DateTime.Now.ToString("HH:mm:ss") };
                         jsonResponse = JsonSerializer.Serialize(timeData);
                     }
-                    else if (path == "/weather/")
+                    else if (path == "/weather/") // Sää endpoint
                     {
                         string reqDateStr = context.Request.QueryString["date"];
                         if (string.IsNullOrEmpty(reqDateStr))
@@ -101,7 +101,7 @@ namespace Kahvitauko_ohjelma.Controller
                         }
                     }
 
-                    else if (path == "/price/now/")
+                    else if (path == "/price/now/") // Sähkön hinta nyt endpoint
                     {
                         try
                         {
@@ -134,7 +134,7 @@ namespace Kahvitauko_ohjelma.Controller
                         }
                     }
 
-                    else if (path == "/price/date")
+                    else if (path == "/price/date") // Sähkön hinta päivälle endpoint
                     {
                         string reqDateStr = context.Request.QueryString["date"];
 
@@ -195,9 +195,6 @@ namespace Kahvitauko_ohjelma.Controller
                             }
                         }
                     }
-
-
-
 
                         byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
                     response.ContentType = "application/json";
