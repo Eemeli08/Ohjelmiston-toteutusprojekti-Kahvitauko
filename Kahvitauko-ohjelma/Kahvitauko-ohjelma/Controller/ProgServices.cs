@@ -4,6 +4,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static Kahvitauko_ohjelma.Controller.SolarPanel;
 using static Kahvitauko_ohjelma.Model.Classmodels;
 
 namespace Kahvitauko_ohjelma.Controller
@@ -251,5 +252,36 @@ namespace Kahvitauko_ohjelma.Controller
             return Math.Max(0, elevation); // ei negatiivinen (yö)
         }
 
+        public static double GetSolarElevation(DateTime time)
+        {
+            // Yksinkertainen malli auringon korkeudesta (Jyväskylä)
+            double lat = 62.2;
+            double declination = 23.45 * Math.Sin(Math.PI / 180 * (360.0 / 365 * (time.DayOfYear - 81)));
+            double hourAngle = 15 * ((time.Hour + time.Minute / 60.0) - 12);
+
+            double elevation = Math.Asin(
+                Math.Sin(lat * Math.PI / 180) * Math.Sin(declination * Math.PI / 180) +
+                Math.Cos(lat * Math.PI / 180) * Math.Cos(declination * Math.PI / 180) *
+                Math.Cos(hourAngle * Math.PI / 180)
+            ) * 180 / Math.PI;
+
+            return Math.Max(0, elevation);
+        }
+
+        public static double CalculatePower(SolarPanelget panel, double solarElevationDeg, double sunlightPercent)
+        {
+            if (solarElevationDeg <= 0) return 0;
+
+            double elevationRad = solarElevationDeg * Math.PI / 180;
+            double tiltRad = panel.TiltAngle * Math.PI / 180;
+
+            double angleFactor = Math.Max(0, Math.Min(1, Math.Sin(elevationRad + tiltRad)));
+            double cloudFactor = sunlightPercent / 100.0;
+
+            return panel.MaxPowerKw * angleFactor * cloudFactor;
+        }
+
     }
+
 }
+

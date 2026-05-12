@@ -1,3 +1,4 @@
+<<<<<<< HEAD:Kahvitauko-ohjelma/Kahvitauko-ohjelma/View/Mainform.cs
 using Kahvitauko_ohjelma.View;
 using Microsoft.Data.SqlClient;
 using Microsoft.VisualBasic.Devices;
@@ -12,6 +13,13 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Net.WebRequestMethods;
+=======
+using Kahvitauko_ohjelma.Controller;
+using Microsoft.Data.SqlClient;
+using System.Text;
+using System.Text.Json;
+
+>>>>>>> 58c9e0e7feab2ff8702824ebf560d8ddef59d15c:Kahvitauko-ohjelma/Kahvitauko-ohjelma/View/Form1.cs
 
 namespace Kahvitauko_ohjelma
 {
@@ -53,11 +61,9 @@ namespace Kahvitauko_ohjelma
                 Hintalbl.Text = "Error: " + ex.Message;
             }
         }
-
-
-        private async void FetchWeatherButton_Click(object sender, EventArgs e) // Hakee sään tiedot palvelimelta ja näyttää ne label2:ssa, label3:ssa ja Tuuli:ssä,
-                                                                                // tämä tapahtuu, kun käyttäjä klikkaa "Sää" -nappia sen jälkeen kun on valinnut, miltä päivältä haluaa sään.
+        private async void FetchWeatherButton_Click(object sender, EventArgs e)
         {
+            // 1. Haetaan säädata (ProgServices-olion kautta, kuten aiemminkin)
             var data = await new Controller.ProgServices().GetWeatherAsync(dateTimePicker1.Value);
 
             if (!string.IsNullOrEmpty(data.Error))
@@ -66,17 +72,21 @@ namespace Kahvitauko_ohjelma
                 return;
             }
 
+            // 2. Näytetään perustiedot
             label2.Text = $"Temperature: {data.TempC} °C";
             label3.Text = $"Sunlight: {data.Sunlight} %";
             Tuuli.Text = $"Wind: {data.WindSpeed} m/s";
 
-            // Lasketaan aurinkopaneelin teho sään perusteella
-            double elevation = GetSolarElevation(dateTimePicker1.Value);
+            // 3. Lasketaan auringon korkeus ja paneelin teho käyttäen uusia metodeja
+            double elevation = Controller.ProgServices.GetSolarElevation(dateTimePicker1.Value);
+
+            // Use the instance method on the local SolarPanel (signature: CalculatePower(double elevationDegrees, double sunlightPercent))
             double power = _solarPanel.CalculatePower(elevation, data.Sunlight);
+
+            // 4. Näytetään tulos
             Solarlabel.Text = $"Aurinkopaneeli: {power:F2} kW";
         }
-
-
+        private SolarPanel _solarPanel = new SolarPanel();
         private async void btnOpenTime_Click(object sender, EventArgs e) // Hakee kellonajan palvelimelta ja näyttää sen label1:ssä, tämä tapahtuu, kun käyttäjä klikkaa "Aika" -nappia.
         {
             using (HttpClient client = new HttpClient())
@@ -91,7 +101,6 @@ namespace Kahvitauko_ohjelma
                 catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
             }
         }
-
         private void label1_Click(object sender, EventArgs e)
         {
             // Tyhjä tapahtumankäsittelijä, joka voidaan poistaa tai käyttää myöhemmin
@@ -275,6 +284,7 @@ namespace Kahvitauko_ohjelma
                 MessageBox.Show("Error: " + ex.Message, "Save Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+<<<<<<< HEAD:Kahvitauko-ohjelma/Kahvitauko-ohjelma/View/Mainform.cs
 
         private SolarPanel _solarPanel = new SolarPanel();
         private double GetSolarElevation(DateTime time)
@@ -332,3 +342,7 @@ public class SolarPanel
 
 
 }
+=======
+    }
+}
+>>>>>>> 58c9e0e7feab2ff8702824ebf560d8ddef59d15c:Kahvitauko-ohjelma/Kahvitauko-ohjelma/View/Form1.cs
