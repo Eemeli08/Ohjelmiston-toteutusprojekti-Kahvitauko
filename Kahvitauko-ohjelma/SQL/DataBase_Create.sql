@@ -86,6 +86,7 @@ CREATE TABLE Sää_data (
     Päivä_aika DATETIME NOT NULL,
     Lämpö DECIMAL(5,2),
     Aurinko DECIMAL(5,2),
-    Tuuli DECIMAL(5,2)
+    Tuuli DECIMAL(5,2),
+    Aurinkopaneeli DECIMAL(10, 2) NULL
 );
 
