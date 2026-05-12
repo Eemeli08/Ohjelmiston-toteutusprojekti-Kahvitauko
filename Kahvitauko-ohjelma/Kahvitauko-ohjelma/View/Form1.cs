@@ -1,17 +1,8 @@
+using Kahvitauko_ohjelma.Controller;
 using Microsoft.Data.SqlClient;
-using System;
-using System.Collections;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Net.WebRequestMethods;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+
 
 namespace Kahvitauko_ohjelma
 {
@@ -52,11 +43,9 @@ namespace Kahvitauko_ohjelma
                 Hintalbl.Text = "Error: " + ex.Message;
             }
         }
-
-
-        private async void FetchWeatherButton_Click(object sender, EventArgs e) // Hakee sään tiedot palvelimelta ja näyttää ne label2:ssa, label3:ssa ja Tuuli:ssä,
-                                                                                // tämä tapahtuu, kun käyttäjä klikkaa "Sää" -nappia sen jälkeen kun on valinnut, miltä päivältä haluaa sään.
+        private async void FetchWeatherButton_Click(object sender, EventArgs e)
         {
+            // 1. Haetaan säädata (ProgServices-olion kautta, kuten aiemminkin)
             var data = await new Controller.ProgServices().GetWeatherAsync(dateTimePicker1.Value);
 
             if (!string.IsNullOrEmpty(data.Error))
@@ -65,17 +54,21 @@ namespace Kahvitauko_ohjelma
                 return;
             }
 
+            // 2. Näytetään perustiedot
             label2.Text = $"Temperature: {data.TempC} °C";
             label3.Text = $"Sunlight: {data.Sunlight} %";
             Tuuli.Text = $"Wind: {data.WindSpeed} m/s";
 
-            // Lasketaan aurinkopaneelin teho sään perusteella
-            double elevation = GetSolarElevation(dateTimePicker1.Value);
+            // 3. Lasketaan auringon korkeus ja paneelin teho käyttäen uusia metodeja
+            double elevation = Controller.ProgServices.GetSolarElevation(dateTimePicker1.Value);
+
+            // Use the instance method on the local SolarPanel (signature: CalculatePower(double elevationDegrees, double sunlightPercent))
             double power = _solarPanel.CalculatePower(elevation, data.Sunlight);
+
+            // 4. Näytetään tulos
             Solarlabel.Text = $"Aurinkopaneeli: {power:F2} kW";
         }
-
-
+        private SolarPanel _solarPanel = new SolarPanel();
         private async void btnOpenTime_Click(object sender, EventArgs e) // Hakee kellonajan palvelimelta ja näyttää sen label1:ssä, tämä tapahtuu, kun käyttäjä klikkaa "Aika" -nappia.
         {
             using (HttpClient client = new HttpClient())
@@ -90,7 +83,6 @@ namespace Kahvitauko_ohjelma
                 catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
             }
         }
-
         private void label1_Click(object sender, EventArgs e)
         {
             // Tyhjä tapahtumankäsittelijä, joka voidaan poistaa tai käyttää myöhemmin
@@ -273,48 +265,5 @@ namespace Kahvitauko_ohjelma
                 MessageBox.Show("Error: " + ex.Message, "Save Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        private SolarPanel _solarPanel = new SolarPanel();
-        private double GetSolarElevation(DateTime time)
-        {
-            // Yksinkertainen malli auringon korkeudesta, joka perustuu päivämäärään ja kellonaikaan
-            double lat = 62.2; // Jyväskylä
-            double lon = 25.7;
-            int dayOfYear = time.DayOfYear;
-            double hour = time.Hour + time.Minute / 60.0;
-
-            double declination = 23.45 * Math.Sin(Math.PI / 180 * (360.0 / 365 * (dayOfYear - 81)));
-            double hourAngle = 15 * (hour - 12);
-
-            double elevation = Math.Asin(
-                Math.Sin(lat * Math.PI / 180) * Math.Sin(declination * Math.PI / 180) +
-                Math.Cos(lat * Math.PI / 180) * Math.Cos(declination * Math.PI / 180) *
-                Math.Cos(hourAngle * Math.PI / 180)
-            ) * 180 / Math.PI;
-
-            return Math.Max(0, elevation);
-        }
     }
-}
-public class SolarPanel
-{
-    // Yksinkertainen malli aurinkopaneelin tehosta, joka perustuu auringon korkeuteen ja pilvisyyteen
-    public double MaxPowerKw { get; set; } = 5.0;  // kWp
-    public double TiltAngle { get; set; } = 35;    // kallistuskulma
-    public double AzimuthAngle { get; set; } = 180; // etelä
-
-    public double CalculatePower(double solarElevationDeg, double sunlightPercent) // solarElevationDeg: Auringon korkeusasteina, sunlightPercent: Pilvisyysprosentti
-    {
-        // Jos aurinko on horisontin alapuolella, teho on nolla
-        if (solarElevationDeg <= 0) return 0;
-
-        double elevationRad = solarElevationDeg * Math.PI / 180;
-        double tiltRad = TiltAngle * Math.PI / 180;
-
-        double angleFactor = Math.Max(0, Math.Min(1, Math.Sin(elevationRad + tiltRad)));
-        double cloudFactor = sunlightPercent / 100.0;
-
-        return MaxPowerKw * angleFactor * cloudFactor;
-    }
-
 }

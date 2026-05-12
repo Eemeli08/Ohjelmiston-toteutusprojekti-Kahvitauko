@@ -1,4 +1,9 @@
-﻿CREATE TABLE [dbo].[Laite] (
+﻿IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'Sähkötiedot')
+BEGIN
+    CREATE DATABASE [Sähkötiedot];
+END
+
+CREATE TABLE [dbo].[Laite] (
     [Id]       INT            NOT NULL IDENTITY(1,1),
     [Nimi]     NVARCHAR(255)  NOT NULL,
     [Max_teho] INT            NOT NULL,
