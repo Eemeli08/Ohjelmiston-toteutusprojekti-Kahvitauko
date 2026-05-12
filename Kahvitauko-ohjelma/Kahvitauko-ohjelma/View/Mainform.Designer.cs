@@ -1,7 +1,7 @@
 ﻿
 namespace Kahvitauko_ohjelma
 {
-    partial class Form1
+    partial class Mainform
     {
         /// <summary>
         ///  Required designer variable.
@@ -29,7 +29,7 @@ namespace Kahvitauko_ohjelma
         /// </summary>
         private void InitializeComponent()
         {
-            btnOpenTime = new Button();
+            components = new System.ComponentModel.Container();
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
@@ -44,23 +44,14 @@ namespace Kahvitauko_ohjelma
             button2 = new Button();
             Solarlabel = new Label();
             richTextBox2 = new RichTextBox();
+            button3 = new Button();
+            timer1 = new System.Windows.Forms.Timer(components);
             SuspendLayout();
-            // 
-            // btnOpenTime
-            // 
-            btnOpenTime.Location = new Point(12, 12);
-            btnOpenTime.Margin = new Padding(2);
-            btnOpenTime.Name = "btnOpenTime";
-            btnOpenTime.Size = new Size(112, 34);
-            btnOpenTime.TabIndex = 0;
-            btnOpenTime.Text = "Aika";
-            btnOpenTime.UseVisualStyleBackColor = true;
-            btnOpenTime.Click += btnOpenTime_Click;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(130, 18);
+            label1.Location = new Point(12, 9);
             label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
             label1.Size = new Size(46, 25);
@@ -101,7 +92,7 @@ namespace Kahvitauko_ohjelma
             // 
             // button1
             // 
-            button1.Location = new Point(12, 52);
+            button1.Location = new Point(11, 36);
             button1.Margin = new Padding(2);
             button1.Name = "button1";
             button1.Size = new Size(112, 34);
@@ -112,7 +103,7 @@ namespace Kahvitauko_ohjelma
             // 
             // dateTimePicker1
             // 
-            dateTimePicker1.Location = new Point(130, 55);
+            dateTimePicker1.Location = new Point(130, 36);
             dateTimePicker1.Margin = new Padding(2);
             dateTimePicker1.Name = "dateTimePicker1";
             dateTimePicker1.Size = new Size(300, 31);
@@ -132,7 +123,7 @@ namespace Kahvitauko_ohjelma
             // 
             // Hintabtn
             // 
-            Hintabtn.Location = new Point(435, 55);
+            Hintabtn.Location = new Point(435, 36);
             Hintabtn.Name = "Hintabtn";
             Hintabtn.Size = new Size(112, 34);
             Hintabtn.TabIndex = 11;
@@ -143,7 +134,7 @@ namespace Kahvitauko_ohjelma
             // Hintalbl
             // 
             Hintalbl.AutoSize = true;
-            Hintalbl.Location = new Point(565, 61);
+            Hintalbl.Location = new Point(553, 41);
             Hintalbl.Name = "Hintalbl";
             Hintalbl.Size = new Size(54, 25);
             Hintalbl.TabIndex = 12;
@@ -197,11 +188,26 @@ namespace Kahvitauko_ohjelma
             richTextBox2.Text = "";
             richTextBox2.Click += richTextBox2_Load;
             // 
-            // Form1
+            // button3
+            // 
+            button3.Location = new Point(1018, 41);
+            button3.Name = "button3";
+            button3.Size = new Size(171, 34);
+            button3.TabIndex = 19;
+            button3.Text = "Asetukset";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
+            // 
+            // timer1
+            // 
+            timer1.Tick += timer1_Tick;
+            // 
+            // Mainform
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1332, 569);
+            Controls.Add(button3);
             Controls.Add(richTextBox2);
             Controls.Add(Solarlabel);
             Controls.Add(button2);
@@ -216,9 +222,8 @@ namespace Kahvitauko_ohjelma
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
-            Controls.Add(btnOpenTime);
             Margin = new Padding(2);
-            Name = "Form1";
+            Name = "Mainform";
             Text = "Form1";
             Load += Form1_Load;
             ResumeLayout(false);
@@ -226,8 +231,6 @@ namespace Kahvitauko_ohjelma
         }
 
         #endregion
-
-        private Button btnOpenTime;
         private Label label1;
         private Label label2;
         private Label label3;
@@ -242,5 +245,7 @@ namespace Kahvitauko_ohjelma
         private Button button2;
         private Label Solarlabel;
         private RichTextBox richTextBox2;
+        private Button button3;
+        private System.Windows.Forms.Timer timer1;
     }
 }

@@ -1,4 +1,6 @@
+using Kahvitauko_ohjelma.View;
 using Microsoft.Data.SqlClient;
+using Microsoft.VisualBasic.Devices;
 using System;
 using System.Collections;
 using System.Diagnostics;
@@ -10,15 +12,13 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Net.WebRequestMethods;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace Kahvitauko_ohjelma
 {
-    public partial class Form1 : Form
+    public partial class Mainform : Form
     {
         //    Controller.ProgServices services = new Controller.ProgServices();  luo palvelimen olion, joka sisältää kaikki endpointit.
-        public Form1()
+        public Mainform()
         {
             InitializeComponent();
         }
@@ -29,8 +29,9 @@ namespace Kahvitauko_ohjelma
             //Näiden avulla ohjelma avaa portin 5001 ja alkaa vastata selaimen pyyntöihin(Time, Weather, Price).
             _ = new Controller.ProgServices().StartServers();
 
-            // Fetch price immediately on load
+            // Hakee hinnan heti kun ohjelma käynnistyy.
             await FetchAndDisplayPrice();
+            timer1.Start();
         }
         private async Task FetchAndDisplayPrice() // Hakee sähkön hinnan palvelimelta ja näyttää sen Hintalbl:ssä, tämä tapahtuu, kun ohjelma käynnistyy.
         {
@@ -109,6 +110,7 @@ namespace Kahvitauko_ohjelma
             label3.Text = "Aurinko";
             Tuuli.Text = "Tuuli";
             Hintalbl.Text = "Hinta";
+            Solarlabel.Text = "Aurinkopaneeli";
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
@@ -160,7 +162,7 @@ namespace Kahvitauko_ohjelma
 
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString)) 
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
                     using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -294,6 +296,17 @@ namespace Kahvitauko_ohjelma
 
             return Math.Max(0, elevation);
         }
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            label1.Text = DateTime.Now.ToString("hh:mm:ss tt");
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            settingsform settingsForm = new settingsform();
+            settingsForm.ShowDialog();
+
+        }
     }
 }
 public class SolarPanel
@@ -316,5 +329,6 @@ public class SolarPanel
 
         return MaxPowerKw * angleFactor * cloudFactor;
     }
+
 
 }
