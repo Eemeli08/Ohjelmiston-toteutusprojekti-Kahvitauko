@@ -1,17 +1,4 @@
-﻿-- Drop tables in reverse dependency order
-DROP TABLE IF EXISTS [dbo].[Residency_Laite];
-DROP TABLE IF EXISTS [dbo].[Laitekaytto];
-DROP TABLE IF EXISTS [dbo].[Residency];
-DROP TABLE IF EXISTS [dbo].[Ihminen];
-DROP TABLE IF EXISTS [dbo].[ElectricityContract];
-DROP TABLE IF EXISTS [dbo].[Car];
-DROP TABLE IF EXISTS [dbo].[Lisäsähkö];
-DROP TABLE IF EXISTS [dbo].[Heat];
-DROP TABLE IF EXISTS [dbo].[Laite];
-DROP TABLE IF EXISTS [dbo].[Sähkö_Data];
-
--- Recreate all tables
-CREATE TABLE [dbo].[Laite] (
+﻿CREATE TABLE [dbo].[Laite] (
     [Id]       INT            NOT NULL IDENTITY(1,1),
     [Nimi]     NVARCHAR(255)  NOT NULL,
     [Max_teho] INT            NOT NULL,
@@ -93,3 +80,12 @@ CREATE TABLE [dbo].[Sähkö_Data] (
     [Hinta_kwh]  DECIMAL(10, 4)  NOT NULL,
     CONSTRAINT [PK_Sähkö_Data] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+CREATE TABLE Sää_data (
+    Id INT Identity(1,1) PRIMARY KEY,
+    Päivä_aika DATETIME NOT NULL,
+    Lämpö DECIMAL(5,2),
+    Aurinko DECIMAL(5,2),
+    Tuuli DECIMAL(5,2)
+);
+
