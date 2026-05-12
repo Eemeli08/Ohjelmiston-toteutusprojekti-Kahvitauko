@@ -304,6 +304,7 @@
             Controls.Add(comboBox1);
             Name = "settingsform";
             Text = "settingsform";
+            Load += settingsform_Load;
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown2).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown3).EndInit();

@@ -1,4 +1,3 @@
-<<<<<<< HEAD:Kahvitauko-ohjelma/Kahvitauko-ohjelma/View/Mainform.cs
 using Kahvitauko_ohjelma.View;
 using Microsoft.Data.SqlClient;
 using Microsoft.VisualBasic.Devices;
@@ -13,13 +12,11 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Net.WebRequestMethods;
-=======
 using Kahvitauko_ohjelma.Controller;
 using Microsoft.Data.SqlClient;
 using System.Text;
 using System.Text.Json;
 
->>>>>>> 58c9e0e7feab2ff8702824ebf560d8ddef59d15c:Kahvitauko-ohjelma/Kahvitauko-ohjelma/View/Form1.cs
 
 namespace Kahvitauko_ohjelma
 {
@@ -284,9 +281,7 @@ namespace Kahvitauko_ohjelma
                 MessageBox.Show("Error: " + ex.Message, "Save Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-<<<<<<< HEAD:Kahvitauko-ohjelma/Kahvitauko-ohjelma/View/Mainform.cs
 
-        private SolarPanel _solarPanel = new SolarPanel();
         private double GetSolarElevation(DateTime time)
         {
             // Yksinkertainen malli auringon korkeudesta, joka perustuu päivämäärään ja kellonaikaan
@@ -339,10 +334,4 @@ public class SolarPanel
 
         return MaxPowerKw * angleFactor * cloudFactor;
     }
-
-
 }
-=======
-    }
-}
->>>>>>> 58c9e0e7feab2ff8702824ebf560d8ddef59d15c:Kahvitauko-ohjelma/Kahvitauko-ohjelma/View/Form1.cs

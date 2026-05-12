@@ -20,7 +20,11 @@ namespace Kahvitauko_ohjelma.View
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void settingsform_Load(object sender, EventArgs e)
+        {
 
         }
-    }
+    } 
 }
