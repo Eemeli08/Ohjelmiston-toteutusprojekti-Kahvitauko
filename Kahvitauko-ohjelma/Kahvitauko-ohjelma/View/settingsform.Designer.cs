@@ -55,6 +55,8 @@
             button1 = new Button();
             textBox1 = new TextBox();
             label12 = new Label();
+            numericUpDown10 = new NumericUpDown();
+            button2 = new Button();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown3).BeginInit();
@@ -64,6 +66,7 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDown7).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown8).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown9).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown10).BeginInit();
             SuspendLayout();
             // 
             // comboBox1
@@ -277,7 +280,7 @@
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(649, 132);
+            textBox1.Location = new Point(410, 349);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(150, 31);
             textBox1.TabIndex = 30;
@@ -285,17 +288,36 @@
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(470, 129);
+            label12.Location = new Point(410, 311);
             label12.Name = "label12";
-            label12.Size = new Size(177, 25);
+            label12.Size = new Size(334, 25);
             label12.TabIndex = 31;
-            label12.Text = "Nimeä kodinkoneesi:";
+            label12.Text = "Nimeä kodinkoneesi ja sen maksimiteho:";
+            // 
+            // numericUpDown10
+            // 
+            numericUpDown10.Location = new Point(582, 349);
+            numericUpDown10.Name = "numericUpDown10";
+            numericUpDown10.Size = new Size(180, 31);
+            numericUpDown10.TabIndex = 32;
+            // 
+            // button2
+            // 
+            button2.Location = new Point(782, 346);
+            button2.Name = "button2";
+            button2.Size = new Size(76, 34);
+            button2.TabIndex = 33;
+            button2.Text = "Uusi";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // settingsform
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(915, 550);
+            Controls.Add(button2);
+            Controls.Add(numericUpDown10);
             Controls.Add(label12);
             Controls.Add(textBox1);
             Controls.Add(button1);
@@ -334,6 +356,7 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDown7).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown8).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown9).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown10).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -367,5 +390,7 @@
         private Button button1;
         private TextBox textBox1;
         private Label label12;
+        private NumericUpDown numericUpDown10;
+        private Button button2;
     }
 }

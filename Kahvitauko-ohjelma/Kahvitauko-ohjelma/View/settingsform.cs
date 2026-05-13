@@ -36,11 +36,14 @@ namespace Kahvitauko_ohjelma.View
             decimal käyttömaksu = numericUpDown8.Value;
             decimal käyttö = numericUpDown9.Value;
 
+            string kodinkone = textBox1.Text;
+            decimal kodinkoneenTeho = numericUpDown10.Value;
+
             if (
 
                 string.IsNullOrEmpty(lammitystapa) || string.IsNullOrEmpty(eristystaso) ||
                 henkilomaara <= 0 || aurinkopaneelinMaxteho <= 0 ||
-                aurinkopaneelinAsKuma <= 0 || akunKapasiteetti <= 0 ||
+                aurinkopaneelinAsKuma <= 0 || akunKapasiteetti <= 0 || siirtomaksu <= 0 || siirto <= 0 || käyttömaksu <= 0 || käyttö <= 0 || kodinkoneenTeho <= 0 ||
                 string.IsNullOrEmpty(autontyyppi))
             {
                 MessageBox.Show("Please make a selection in all fields.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -57,6 +60,8 @@ namespace Kahvitauko_ohjelma.View
             string queryTable2 = "INSERT INTO Auto_Tyyppi (Tyyppi, Akun_koko) VALUES (@Tyyppi, @Akun_koko)";
 
             string queryTable3 = "INSERT INTO Sähkösopimus (Siirtomaksu, Siirto, Käyttömaksu, Käyttö) VALUES (@Siirtomaksu, @Siirto, @Käyttömaksu, @Käyttö)";
+
+            string queryTable4 = "INSERT INTO Laite (Nimi, Max_Teho) VALUES (@Nimi, @Max_Teho)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -97,9 +102,17 @@ namespace Kahvitauko_ohjelma.View
                             await command3.ExecuteNonQueryAsync();
                         }
 
+                        using (SqlCommand command4 = new SqlCommand(queryTable4, connection, transaction))
+                        {
+                            command4.Parameters.AddWithValue("@Nimi", kodinkone);
+                            command4.Parameters.AddWithValue("@Max_Teho", kodinkoneenTeho);
+
+                            await command4.ExecuteNonQueryAsync();
+                        }
+
                         await transaction.CommitAsync();
 
-                        MessageBox.Show("All data saved successfully to both tables!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("All data saved successfully to all tables!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         this.Close();
                     }
@@ -122,8 +135,6 @@ namespace Kahvitauko_ohjelma.View
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e) // Tämä tapahtuma tarkistaa onko autontyyppi "Täyssähkö" ja jos on, niin on mahdollista valita akun koko,
                                                                                 // muuten akun koko on pois käytöstä ja sen arvo nollataan
         {
-            if (comboBox2.SelectedItem == null) return;
-
             if (comboBox2.SelectedItem.ToString() == "Täyssähkö")
             {
                 numericUpDown5.Enabled = true;
@@ -135,5 +146,37 @@ namespace Kahvitauko_ohjelma.View
             }
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string laite = textBox1.Text;
+            decimal maxTeho = numericUpDown10.Value;
+
+            string connectionString =
+                 "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Sähkötiedot;" +
+                 "Integrated Security=True;Pooling=False;Encrypt=False;TrustServerCertificate=True;";
+
+            string query = "INSERT INTO Laite (Nimi, Max_Teho) VALUES (@Nimi, @Max_Teho)";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Nimi", laite);
+                    command.Parameters.AddWithValue("@Max_Teho", maxTeho);
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Virhe tallennettaessa laitetta: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+
+                textBox1.Clear();
+                numericUpDown10.Value = 0;
+            }
+        }
     }
 }
