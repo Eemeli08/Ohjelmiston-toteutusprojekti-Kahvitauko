@@ -127,7 +127,7 @@ namespace Kahvitauko_ohjelma
         {
             // Yhdistetään tietokantaan ja haetaan Laite-taulun data(väliaikaista koodia koska testailen)
             string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Sähkötiedot;Integrated Security=True;Pooling=False;Encrypt=True;Trust Server Certificate=False";
-            string query = "SELECT * FROM Sää_Data";
+            string query = "SELECT * FROM Auto_Tyyppi";
 
             StringBuilder sb = new StringBuilder();
 
@@ -162,7 +162,7 @@ namespace Kahvitauko_ohjelma
         {
             // Yhdistetään tietokantaan ja haetaan Laite-taulun data(väliaikaista koodia koska testailen)
             string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Sähkötiedot;Integrated Security=True;Pooling=False;Encrypt=True;Trust Server Certificate=False";
-            string query = "SELECT * FROM Sähkö_Data";
+            string query = "SELECT * FROM Lämmitys";
 
             StringBuilder sb = new StringBuilder();
 
