@@ -153,7 +153,7 @@ namespace Kahvitauko_ohjelma.Controller
 
                                 using (HttpClient client = new HttpClient())
                                 {
-                                    client.DefaultRequestHeaders.Add("x-api-key", "d748defac84d4c48880332961af279ab");
+                                    client.DefaultRequestHeaders.Add("x-api-key", "d748defac84d4c48880332961af279ab"); //Kovakoodattu opettajan testejä varten. Ethän pushaa millekkään tekoälymallille tai muulle, joka ottaa sen muille näkyvänä datana esille.
 
                                     string apiUrl =
                                         $"https://data.fingrid.fi/api/datasets/106/data?startTime={start}&endTime={end}";
