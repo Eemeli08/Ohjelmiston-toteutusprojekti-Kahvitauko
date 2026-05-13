@@ -18,7 +18,8 @@ namespace Kahvitauko_ohjelma.View
             InitializeComponent();
         }
 
-        private async void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e) // Tömö metodi tallentaa kaikki tiedot tietokantaan, jos kaikki kentät on täytetty, muuten se näyttää varoituksen käyttäjälle.
+                                                                     // Tallennus tapahtuu transaktion avulla, joka varmistaa että kaikki tiedot tallentuu onnistuneesti tai ei lainkaan, jos jokin menee pieleen.
         {
             // Ottaa lämmitytiedot, auton tiedot ja sähkösopimustiedot ja tallentaa ne tietokantaan
             string lammitystapa = comboBox1.SelectedItem?.ToString();
@@ -39,12 +40,13 @@ namespace Kahvitauko_ohjelma.View
             string kodinkone = textBox1.Text;
             decimal kodinkoneenTeho = numericUpDown10.Value;
 
-            if (
+            if(
 
                 string.IsNullOrEmpty(lammitystapa) || string.IsNullOrEmpty(eristystaso) ||
                 henkilomaara <= 0 || aurinkopaneelinMaxteho <= 0 ||
                 aurinkopaneelinAsKuma <= 0 || akunKapasiteetti <= 0 || siirtomaksu <= 0 || siirto <= 0 || käyttömaksu <= 0 || käyttö <= 0 || kodinkoneenTeho <= 0 ||
-                string.IsNullOrEmpty(autontyyppi))
+                string.IsNullOrEmpty(autontyyppi)
+                )
             {
                 MessageBox.Show("Please make a selection in all fields.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -130,7 +132,7 @@ namespace Kahvitauko_ohjelma.View
                     }
                 }
             }
-        } // End of button1_Click event handler
+        } // utton1_clickin loppu
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e) // Tämä tapahtuma tarkistaa onko autontyyppi "Täyssähkö" ja jos on, niin on mahdollista valita akun koko,
                                                                                 // muuten akun koko on pois käytöstä ja sen arvo nollataan
