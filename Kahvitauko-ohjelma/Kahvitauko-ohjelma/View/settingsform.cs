@@ -20,7 +20,7 @@ namespace Kahvitauko_ohjelma.View
 
         private async void button1_Click(object sender, EventArgs e)
         {
-            // Ottaa lämmitytiedot ja auton tiedot, tallentaa ne tietokantaan ja sulkee ikkunan
+            // Ottaa lämmitytiedot, auton tiedot ja sähkösopimustiedot ja tallentaa ne tietokantaan
             string lammitystapa = comboBox1.SelectedItem?.ToString();
             string eristystaso = comboBox3.SelectedItem?.ToString();
             decimal henkilomaara = numericUpDown1.Value;
@@ -31,8 +31,13 @@ namespace Kahvitauko_ohjelma.View
             string autontyyppi = comboBox2.SelectedItem?.ToString();
             decimal akunKoko = numericUpDown5.Value;
 
+            decimal siirtomaksu = numericUpDown6.Value;
+            decimal siirto = numericUpDown7.Value;
+            decimal käyttömaksu = numericUpDown8.Value;
+            decimal käyttö = numericUpDown9.Value;
+
             if (
-                
+
                 string.IsNullOrEmpty(lammitystapa) || string.IsNullOrEmpty(eristystaso) ||
                 henkilomaara <= 0 || aurinkopaneelinMaxteho <= 0 ||
                 aurinkopaneelinAsKuma <= 0 || akunKapasiteetti <= 0 ||
@@ -46,8 +51,12 @@ namespace Kahvitauko_ohjelma.View
                  "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Sähkötiedot;" +
                  "Integrated Security=True;Pooling=False;Encrypt=False;TrustServerCertificate=True;";
 
+            // SQL query joka lisää tiedot Lämmitys-tauluun, Auto_Tyyppi-tauluun ja Sähkösopimus-tauluun
             string query = "INSERT INTO Lämmitys (Lämmitystapa, Eristystapa, Henkilömäärä, Aurinkopaneelin_maxteho, Aurinkopaneelin_as_kulma, Akun_kapasiteetti) VALUES (@Lämmitystapa, @Eristystapa, @Henkilömäärä, @Aurinkopaneelin_maxteho, @Aurinkopaneelin_as_kulma, @Akun_kapasiteetti)";
+
             string queryTable2 = "INSERT INTO Auto_Tyyppi (Tyyppi, Akun_koko) VALUES (@Tyyppi, @Akun_koko)";
+
+            string queryTable3 = "INSERT INTO Sähkösopimus (Siirtomaksu, Siirto, Käyttömaksu, Käyttö) VALUES (@Siirtomaksu, @Siirto, @Käyttömaksu, @Käyttö)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -78,6 +87,16 @@ namespace Kahvitauko_ohjelma.View
                             await command2.ExecuteNonQueryAsync();
                         }
 
+                        using (SqlCommand command3 = new SqlCommand(queryTable3, connection, transaction))
+                        {
+                            command3.Parameters.AddWithValue("@Siirtomaksu", siirtomaksu);
+                            command3.Parameters.AddWithValue("@Siirto", siirto);
+                            command3.Parameters.AddWithValue("@Käyttömaksu", käyttömaksu);
+                            command3.Parameters.AddWithValue("@Käyttö", käyttö);
+
+                            await command3.ExecuteNonQueryAsync();
+                        }
+
                         await transaction.CommitAsync();
 
                         MessageBox.Show("All data saved successfully to both tables!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -99,5 +118,22 @@ namespace Kahvitauko_ohjelma.View
                 }
             }
         } // End of button1_Click event handler
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e) // Tämä tapahtuma tarkistaa onko autontyyppi "Täyssähkö" ja jos on, niin on mahdollista valita akun koko,
+                                                                                // muuten akun koko on pois käytöstä ja sen arvo nollataan
+        {
+            if (comboBox2.SelectedItem == null) return;
+
+            if (comboBox2.SelectedItem.ToString() == "Täyssähkö")
+            {
+                numericUpDown5.Enabled = true;
+            }
+            else
+            {
+                numericUpDown5.Enabled = false;
+                numericUpDown5.Value = 0;
+            }
+        }
+
     }
 }

@@ -53,6 +53,8 @@
             numericUpDown9 = new NumericUpDown();
             label11 = new Label();
             button1 = new Button();
+            textBox1 = new TextBox();
+            label12 = new Label();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown3).BeginInit();
@@ -181,6 +183,7 @@
             comboBox2.Name = "comboBox2";
             comboBox2.Size = new Size(182, 33);
             comboBox2.TabIndex = 17;
+            comboBox2.SelectedIndexChanged += comboBox2_SelectedIndexChanged;
             // 
             // numericUpDown5
             // 
@@ -272,11 +275,29 @@
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(649, 132);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(150, 31);
+            textBox1.TabIndex = 30;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(470, 129);
+            label12.Name = "label12";
+            label12.Size = new Size(177, 25);
+            label12.TabIndex = 31;
+            label12.Text = "Nimeä kodinkoneesi:";
+            // 
             // settingsform
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(915, 550);
+            Controls.Add(label12);
+            Controls.Add(textBox1);
             Controls.Add(button1);
             Controls.Add(numericUpDown9);
             Controls.Add(label11);
@@ -344,5 +365,7 @@
         private NumericUpDown numericUpDown9;
         private Label label11;
         private Button button1;
+        private TextBox textBox1;
+        private Label label12;
     }
 }
