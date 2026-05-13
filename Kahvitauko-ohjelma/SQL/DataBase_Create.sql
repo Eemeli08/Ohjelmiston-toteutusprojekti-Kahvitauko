@@ -135,6 +135,39 @@ BEGIN
         [Aurinkopaneeli] DECIMAL(10, 2) NULL
     );
 END
+IF OBJECT_ID('[dbo].[Auto_Tyyppi]', 'U') IS NULL
+BEGIN
+    CREATE TABLE [dbo].[Auto_Tyyppi] (
+        [Id]         INT             NOT NULL IDENTITY(1,1),
+        [Tyyppi] NVARCHAR(255)        NOT NULL,
+        [Akun_koko]  INT  NOT NULL,
+        CONSTRAINT [PK_Auto_Tyyppi] PRIMARY KEY CLUSTERED ([Id] ASC)
+        );
+END
+IF OBJECT_ID('[dbo].[Lämmitys]', 'U') IS NULL
+BEGIN
+    CREATE TABLE [dbo].[Lämmitys] (
+        [Id]         INT             NOT NULL IDENTITY(1,1),
+        [Lämmitystapa] NVARCHAR(255)        NOT NULL,
+        [Eristystapa]  NVARCHAR(255)  NOT NULL,
+        [Henkilömäärä] INT  NOT NULL,
+        [Aurinkopaneelin_maxteho] INT  NOT NULL,
+        [Aurinkopaneelin_as_kulma] INT  NOT NULL,
+        [Akun_kapasiteetti] INT  NOT NULL,
+        CONSTRAINT [PK_Lämmitys] PRIMARY KEY CLUSTERED ([Id] ASC)
+        );
+END
+IF OBJECT_ID('[dbo].[Sähkösopimus]', 'U') IS NULL
+BEGIN
+    CREATE TABLE [dbo].[Sähkösopimus] (
+        [Id]         INT             NOT NULL IDENTITY(1,1),
+        [Siirtomaksu] DECIMAL(18,2)        NOT NULL,
+        [Siirto]  DECIMAL(18,2)  NOT NULL,
+        [Käyttömaksu] DECIMAL(18,2) NOT NULL,
+        [Käyttö] DECIMAL(18,2) NOT NULL,
+        CONSTRAINT [PK_Sähkösopimus] PRIMARY KEY CLUSTERED ([Id] ASC)
+        );
+END
 
 --Tämä versio on tarkoitettu vain tietokannan luontiin sekä recoveryyn sen "If doesnt exist" -osioiden avulla. 
 --Dataa ei ole vielä lisätty, mutta se on tarkoitus tehdä erikseen.
