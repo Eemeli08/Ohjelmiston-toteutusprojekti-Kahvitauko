@@ -312,26 +312,7 @@ namespace Kahvitauko_ohjelma
             settingsForm.ShowDialog();
 
         }
+
     }
 }
-public class SolarPanel
-{
-    // Yksinkertainen malli aurinkopaneelin tehosta, joka perustuu auringon korkeuteen ja pilvisyyteen
-    public double MaxPowerKw { get; set; } = 5.0;  // kWp
-    public double TiltAngle { get; set; } = 35;    // kallistuskulma
-    public double AzimuthAngle { get; set; } = 180; // etelä
 
-    public double CalculatePower(double solarElevationDeg, double sunlightPercent) // solarElevationDeg: Auringon korkeusasteina, sunlightPercent: Pilvisyysprosentti
-    {
-        // Jos aurinko on horisontin alapuolella, teho on nolla
-        if (solarElevationDeg <= 0) return 0;
-
-        double elevationRad = solarElevationDeg * Math.PI / 180;
-        double tiltRad = TiltAngle * Math.PI / 180;
-
-        double angleFactor = Math.Max(0, Math.Min(1, Math.Sin(elevationRad + tiltRad)));
-        double cloudFactor = sunlightPercent / 100.0;
-
-        return MaxPowerKw * angleFactor * cloudFactor;
-    }
-}

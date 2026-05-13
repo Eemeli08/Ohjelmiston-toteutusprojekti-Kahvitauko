@@ -37,5 +37,7 @@ namespace Kahvitauko_ohjelma.Model
             public double TiltAngle { get; set; } = 35;
             public double AzimuthAngle { get; set; } = 180;
         }
+
+
     }
 }
