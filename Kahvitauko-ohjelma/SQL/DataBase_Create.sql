@@ -1,5 +1,4 @@
-﻿-- 1. Tietokannan luonti
-IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'Sähkötiedot')
+﻿IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'Sähkötiedot')
 BEGIN
     CREATE DATABASE [Sähkötiedot];
 END
@@ -7,6 +6,7 @@ GO
 
 USE [Sähkötiedot];
 GO
+-- 1. Database
 
 -- 2. Taulut ilman ulkoisia avaimia
 IF OBJECT_ID('[dbo].[Laite]', 'U') IS NULL
