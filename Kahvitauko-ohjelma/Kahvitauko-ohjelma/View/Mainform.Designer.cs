@@ -57,7 +57,6 @@ namespace Kahvitauko_ohjelma
             label1.Size = new Size(46, 25);
             label1.TabIndex = 1;
             label1.Text = "Aika";
-            label1.Click += label1_Click;
             // 
             // label2
             // 
@@ -68,7 +67,6 @@ namespace Kahvitauko_ohjelma
             label2.Size = new Size(67, 25);
             label2.TabIndex = 2;
             label2.Text = "Lämpö";
-            label2.Click += label2_Click;
             // 
             // label3
             // 
@@ -108,7 +106,6 @@ namespace Kahvitauko_ohjelma
             dateTimePicker1.Name = "dateTimePicker1";
             dateTimePicker1.Size = new Size(300, 31);
             dateTimePicker1.TabIndex = 6;
-            dateTimePicker1.ValueChanged += dateTimePicker1_ValueChanged;
             // 
             // reset
             // 

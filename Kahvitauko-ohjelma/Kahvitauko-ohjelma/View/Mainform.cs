@@ -36,6 +36,8 @@ namespace Kahvitauko_ohjelma
 
             // Hakee hinnan heti kun ohjelma käynnistyy.
             await FetchAndDisplayPrice();
+
+            // Aloittaa ajastiimen joka päivittää kellonajan label1:een joka sekunti, jotta kellonaika on aina ajan tasalla.
             timer1.Start();
         }
         private async Task FetchAndDisplayPrice() // Hakee sähkön hinnan palvelimelta ja näyttää sen Hintalbl:ssä, tämä tapahtuu, kun ohjelma käynnistyy.
@@ -84,6 +86,7 @@ namespace Kahvitauko_ohjelma
             Solarlabel.Text = $"Aurinkopaneeli: {power:F2} kW";
         }
         private SolarPanel _solarPanel = new SolarPanel();
+        
         private async void btnOpenTime_Click(object sender, EventArgs e) // Hakee kellonajan palvelimelta ja näyttää sen label1:ssä, tämä tapahtuu, kun käyttäjä klikkaa "Aika" -nappia.
         {
             using (HttpClient client = new HttpClient())
@@ -98,15 +101,6 @@ namespace Kahvitauko_ohjelma
                 catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
             }
         }
-        private void label1_Click(object sender, EventArgs e)
-        {
-            // Tyhjä tapahtumankäsittelijä, joka voidaan poistaa tai käyttää myöhemmin
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-            // Tyhjä tapahtumankäsittelijä, joka voidaan poistaa tai käyttää myöhemmin
-        }
 
         private void reset_Click(object sender, EventArgs e)
         {
@@ -119,13 +113,10 @@ namespace Kahvitauko_ohjelma
             Solarlabel.Text = "Aurinkopaneeli";
         }
 
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
-        {
-            // Tyhjä tapahtumankäsittelijä, joka voidaan poistaa tai käyttää myöhemmin
-        }
+        // !!!VÄLIAIKAINEN KOODI TESTAUSTA VARTEN, POISTETAAN TAI MUUTETAAN LOPULLISESSA VERSIOSSA!!!
         private void richTextBox1_Load(object sender, EventArgs e) // Hakee tiedot tietokannan taulusta ja näyttää ne richTextBox1:ssä, tämä tapahtuu, kun richTextBox1 ladataan, eli siis heti, kun ohjelma käynnistyy. (testausta vaan)
         {
-            // Yhdistetään tietokantaan ja haetaan Laite-taulun data(väliaikaista koodia koska testailen)
+            // Yhdistetään tietokantaan ja haetaan Auto_Tyyppi-taulun data(väliaikaista koodia koska testailen)
             string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Sähkötiedot;Integrated Security=True;Pooling=False;Encrypt=True;Trust Server Certificate=False";
             string query = "SELECT * FROM Auto_Tyyppi";
 
@@ -158,9 +149,11 @@ namespace Kahvitauko_ohjelma
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
+
+        // !!!VÄLIAIKAINEN KOODI TESTAUSTA VARTEN, POISTETAAN TAI MUUTETAAN LOPULLISESSA VERSIOSSA!!!
         private void richTextBox2_Load(object sender, EventArgs e) // Hakee tiedot tietokannan taulusta ja näyttää ne richTextBox1:ssä, tämä tapahtuu, kun richTextBox1 ladataan, eli siis heti, kun ohjelma käynnistyy. (testausta vaan)
         {
-            // Yhdistetään tietokantaan ja haetaan Laite-taulun data(väliaikaista koodia koska testailen)
+            // Yhdistetään tietokantaan ja haetaan Lämmitys-taulun data(väliaikaista koodia koska testailen)
             string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Sähkötiedot;Integrated Security=True;Pooling=False;Encrypt=True;Trust Server Certificate=False";
             string query = "SELECT * FROM Lämmitys";
 
@@ -194,20 +187,12 @@ namespace Kahvitauko_ohjelma
             }
         }
 
-        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
-        {
-            // Tyhjä tapahtumankäsittelijä, joka voidaan poistaa tai käyttää myöhemmin
-        }
         private async void btnTestPrice_Click(object sender, EventArgs e)
         {
             // Testataan FetchAndDisplayPrice-metodia, joka hakee sähkön hinnan ja päivittää Hintalbl:n tekstin,
             // hinta päivittyy ja tulostuu labelille aina kun ohjelma käynnistyy, mutta tällä napilla voi hakea hinnan uudestaan halutessaan.
             await FetchAndDisplayPrice();
-        }
 
-        private void listBox1_Click(object sender, EventArgs e)
-        {
-            // Tyhjä tapahtumankäsittelijä, joka voidaan poistaa tai käyttää myöhemmin
         }
 
         private void btnSave_Click(object sender, EventArgs e) // Tallennetaan säädata tietokantaan
@@ -244,7 +229,7 @@ namespace Kahvitauko_ohjelma
             }
         }
 
-        private void button2_Click(object sender, EventArgs e) //Tallentaa sään tiedot tietokantaan, eli siis lämpötilan, auringonvalon ja tuulen nopeuden. Tämä tapahtuu, kun käyttäjä klikkaa "Tallenna sää" -nappia.
+        private void button2_Click(object sender, EventArgs e) // Tallentaa sään tiedot tietokantaan, eli siis lämpötilan, auringonvalon ja tuulen nopeuden. Tämä tapahtuu, kun käyttäjä klikkaa "Tallenna sää" -nappia.
         {
             string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Sähkötiedot;Integrated Security=True";
 
@@ -303,11 +288,13 @@ namespace Kahvitauko_ohjelma
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
+            // Timeri joka päivittää kellonajan label1:een joka sekunti, jotta kellonaika on aina ajan tasalla, tämä tapahtuu, koska timer1 on asetettu käynnistymään Form1_Load-metodissa.
             label1.Text = DateTime.Now.ToString("hh:mm:ss tt");
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
+            // Avaa settingsform-ikkunan, kun käyttäjä klikkaa "Asetukset" -nappia.
             settingsform settingsForm = new settingsform();
             settingsForm.ShowDialog();
 
