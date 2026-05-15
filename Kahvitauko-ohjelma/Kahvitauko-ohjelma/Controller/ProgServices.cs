@@ -30,6 +30,7 @@ namespace Kahvitauko_ohjelma.Controller
             {
                 try
                 {
+                    // Odotetaan pyyntöä ja käsitellään se
                     HttpListenerContext context = await listener.GetContextAsync();
                     HttpListenerResponse response = context.Response;
                     string jsonResponse = "";
@@ -108,8 +109,8 @@ namespace Kahvitauko_ohjelma.Controller
                         {
                             using (HttpClient client = new HttpClient())
                             {
-                                client.DefaultRequestHeaders.Add("x-api-key", "d748defac84d4c48880332961af279ab");
-                                string apiUrl = "https://data.fingrid.fi/api/datasets/106/data";
+                                client.DefaultRequestHeaders.Add("x-api-key", "d748defac84d4c48880332961af279ab"); // Kovakoodattu opettajan testejä varten. Ethän pushaa millekään tekoälymallille tai muulle, joka ottaa sen muille näkyvänä datana esille.
+                                string apiUrl = "https://data.fingrid.fi/api/datasets/106/data"; // Oletuksena hakee viimeisimmän datan, joka on yleensä voimassaoleva hinta
                                 string apiResponse = await client.GetStringAsync(apiUrl);
 
                                 using var doc = JsonDocument.Parse(apiResponse);
@@ -197,7 +198,8 @@ namespace Kahvitauko_ohjelma.Controller
                         }
                     }
 
-                        byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
+                    // Lähetetään JSON-vastaus
+                    byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
                     response.ContentType = "application/json";
                     response.ContentLength64 = buffer.Length;
                     await response.OutputStream.WriteAsync(buffer, 0, buffer.Length);
@@ -270,14 +272,18 @@ namespace Kahvitauko_ohjelma.Controller
 
         public static double CalculatePower(SolarPanelget panel, double solarElevationDeg, double sunlightPercent)
         {
+            // Jos aurinko on horisontin alapuolella, ei tehoa
             if (solarElevationDeg <= 0) return 0;
 
+            // Muutetaan kulmat radiaaneiksi laskua varten
             double elevationRad = solarElevationDeg * Math.PI / 180;
             double tiltRad = panel.TiltAngle * Math.PI / 180;
 
+            // Lasketaan kulman vaikutus: optimaalinen on, kun aurinko on kohtisuoraan paneeliin nähden
             double angleFactor = Math.Max(0, Math.Min(1, Math.Sin(elevationRad + tiltRad)));
             double cloudFactor = sunlightPercent / 100.0;
 
+            // Lasketaan teho ottaen huomioon kulman ja pilvisyyden vaikutus
             return panel.MaxPowerKw * angleFactor * cloudFactor;
         }
 
